@@ -2,7 +2,7 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <GL/glut.h>
-#include "Gomba.h"
+#include "Goomba.h"
 #include "Game.h"
 
 #define JUMP_ANGLE_STEP 4
@@ -10,12 +10,12 @@
 #define FALL_STEP 6
 
 
-enum GombaAnims
+enum GoombaAnims
 {
 	MOVE, DIE, STAND_LEFT, STAND_RIGHT
 };
 
-void Gomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
+void Goomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	speedX = 0.f;
 	accelX = 0.1f;
@@ -40,22 +40,21 @@ void Gomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posGomba.x), float(tileMapDispl.y + posGomba.y)));
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posGoomba.x), float(tileMapDispl.y + posGoomba.y)));
 
 }
 
-void Gomba::update(int deltaTime)
+void Goomba::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 	float friction = 0.92f;  // Valor de fricción. 0.92
 
-	glm::vec2 futurePos = posGomba;  // Creamos una posición futura para verificar colisiones antes de mover al jugador.
+	glm::vec2 futurePos = posGoomba;  // Creamos una posición futura para verificar colisiones antes de mover al jugador.
 
 	// Inicializar el generador de números aleatorios con el tiempo actual
     // para que los resultados sean diferentes en cada ejecución.
 	std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
-	// Generar un número aleatorio entre 0 y la cantidad de movimientos - 1.
 	if (Movement == NULL) Movement = LEFT;
 
 	if (Movement == LEFT)
@@ -72,7 +71,7 @@ void Gomba::update(int deltaTime)
 		futurePos.x += speedX;
 
 		if (!map->collisionMoveLeft(futurePos, glm::ivec2(16, 16)))
-			posGomba.x = futurePos.x;
+			posGoomba.x = futurePos.x;
 		else
 		{
 			sprite->changeAnimation(STAND_LEFT);
@@ -93,7 +92,7 @@ void Gomba::update(int deltaTime)
 		futurePos.x += speedX;
 
 		if (!map->collisionMoveRight(futurePos, glm::ivec2(16, 16)))
-			posGomba.x = futurePos.x;
+			posGoomba.x = futurePos.x;
 		else
 		{
 			sprite->changeAnimation(STAND_RIGHT);
@@ -110,11 +109,11 @@ void Gomba::update(int deltaTime)
 
 		if (speedX < 0 && !map->collisionMoveLeft(futurePos, glm::ivec2(16, 16))) {
 			if (sprite->animation() != MOVE) sprite->changeAnimation(MOVE);
-			posGomba.x = futurePos.x;
+			posGoomba.x = futurePos.x;
 		}
 		else if (speedX > 0 && !map->collisionMoveRight(futurePos, glm::ivec2(16, 16))) {
 			if (sprite->animation() != MOVE) sprite->changeAnimation(MOVE);
-			posGomba.x = futurePos.x;
+			posGoomba.x = futurePos.x;
 		}
 		else {
 			speedX = 0;
@@ -131,14 +130,14 @@ void Gomba::update(int deltaTime)
 		if (jumpAngle == 180)
 		{
 			bJumping = false;
-			posGomba.y = startY;
+			posGoomba.y = startY;
 		}
 		else
 		{
 			futurePos.y = int(startY - JUMP_HEIGHT * sin(3.14159f * jumpAngle / 180.f));
-			if (!map->collisionMoveDown(futurePos, glm::ivec2(16, 16), &posGomba.y) && !map->collisionMoveUp(futurePos, glm::ivec2(16, 16), &posGomba.y))
+			if (!map->collisionMoveDown(futurePos, glm::ivec2(16, 16), &posGoomba.y) && !map->collisionMoveUp(futurePos, glm::ivec2(16, 16), &posGoomba.y))
 			{
-				posGomba.y = futurePos.y;
+				posGoomba.y = futurePos.y;
 			}
 			else
 			{
@@ -150,35 +149,35 @@ void Gomba::update(int deltaTime)
 	{
 		// Logica para cuando el jugador está cayendo.
 		futurePos.y += FALL_STEP;
-		if (!map->collisionMoveDown(futurePos, glm::ivec2(16, 16), &posGomba.y))
+		if (!map->collisionMoveDown(futurePos, glm::ivec2(16, 16), &posGoomba.y))
 		{
-			posGomba.y = futurePos.y;
+			posGoomba.y = futurePos.y;
 		}
-		if (map->collisionMoveDown(futurePos, glm::ivec2(16, 16), &posGomba.y) && !bJumping && false)
+		if (map->collisionMoveDown(futurePos, glm::ivec2(16, 16), &posGoomba.y) && !bJumping && false)
 		{
 			bJumping = true;
 			jumpAngle = 0;
-			startY = posGomba.y;
+			startY = posGoomba.y;
 		}
 	}
 
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posGomba.x), float(tileMapDispl.y + posGomba.y)));
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posGoomba.x), float(tileMapDispl.y + posGoomba.y)));
 }
 
-void Gomba::render()
+void Goomba::render()
 {
 	sprite->render();
 }
 
-void Gomba::setTileMap(TileMap* tileMap)
+void Goomba::setTileMap(TileMap* tileMap)
 {
 	map = tileMap;
 }
 
-void Gomba::setPosition(const glm::vec2& pos)
+void Goomba::setPosition(const glm::vec2& pos)
 {
-	posGomba = pos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posGomba.x), float(tileMapDispl.y + posGomba.y)));
+	posGoomba = pos;
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posGoomba.x), float(tileMapDispl.y + posGoomba.y)));
 }
 
 

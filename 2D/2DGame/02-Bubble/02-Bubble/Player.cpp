@@ -12,7 +12,7 @@
 #include <string>
 #include <sstream>
 
-void pollaGorda(const std::string& str) {
+void debugMessage(const std::string& str) {
 	std::wstring wstr = std::wstring(str.begin(), str.end());
 	OutputDebugString(wstr.c_str());
 }
@@ -67,6 +67,10 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	
 }
 
+bool Player::isJumpingOrFalling() {
+	return bJumping || jumpAngle < 180;
+}
+
 void Player::update(int deltaTime)
 {
 	sprite->update(deltaTime);
@@ -74,7 +78,7 @@ void Player::update(int deltaTime)
 
 	glm::vec2 initPos = posPlayer;
 	glm::vec2 futurePos = initPos;  // Creamos una posición futura para verificar colisiones antes de mover al jugador.
-	pollaGorda("posPlayer x: " + std::to_string(posPlayer.x)+"\n");
+	debugMessage("posPlayer x: " + std::to_string(posPlayer.x)+"\n");
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
 		if (speedX == 0) speedX = -1.f;
@@ -89,7 +93,7 @@ void Player::update(int deltaTime)
 		}
 
 		futurePos.x += speedX;
-		pollaGorda("futurePos x: " + std::to_string(futurePos.x) + "\n");
+		debugMessage("futurePos x: " + std::to_string(futurePos.x) + "\n");
 
 		if (!map->collisionMoveLeft(futurePos, glm::ivec2(16, 16)))
 			posPlayer.x = futurePos.x;

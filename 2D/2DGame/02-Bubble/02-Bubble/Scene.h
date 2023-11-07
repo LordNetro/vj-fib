@@ -6,7 +6,8 @@
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include "Player.h"
-#include "Gomba.h"
+#include "Goomba.h"
+#include "Koopa.h"
 #include <vector>
 
 
@@ -31,9 +32,11 @@ private:
 private:
 	TileMap *map;
 	Player* player;
-	Gomba* gomba;
+	Goomba* goomba;
+	Koopa* koopa;
 	ShaderProgram texProgram;
-	std::vector<Gomba*> gombas;  // Vector para almacenar punteros a Gomba
+	std::vector<Goomba*> goombas;  // Vector para almacenar punteros a Goomba
+	std::vector<Koopa*> koopas;  // Vector para almacenar punteros a Goomba
 	float currentTime;
 	glm::mat4 projection;
 	float zoomFactor;
