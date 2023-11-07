@@ -57,7 +57,7 @@ void Scene::init()
 	// Asegúrate de que el vector esté vacío antes de empezar a añadir Gombas
 	gombas.clear();
 
-	for (int i = 0; i < 0; ++i) {
+	for (int i = 0; i < 5; ++i) {
 		Gomba* newGomba = new Gomba();
 		newGomba->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		newGomba->setPosition(glm::vec2((INIT_GOMBA_X_TILES + i * 2) * map->getTileSize(), INIT_GOMBA_Y_TILES * map->getTileSize())); // Puedes cambiar la posición de cada uno si es necesario
