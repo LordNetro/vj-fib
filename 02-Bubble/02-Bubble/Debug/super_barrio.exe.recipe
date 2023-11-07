@@ -2,7 +2,11 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
+<<<<<<< Updated upstream:02-Bubble/02-Bubble/Debug/super_barrio.exe.recipe
       <FullPath>C:\Users\marco\Documents\FIB\VJ\2D\2DGame\02-Bubble\Debug\super_barrio.exe</FullPath>
+=======
+      <FullPath>C:\Users\admin\Documents\GitHub\vj-fib\2D\2DGame\02-Bubble\Debug\super_barrio.exe</FullPath>
+>>>>>>> Stashed changes:2D/2DGame/02-Bubble/02-Bubble/Debug/super_barrio.exe.recipe
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
