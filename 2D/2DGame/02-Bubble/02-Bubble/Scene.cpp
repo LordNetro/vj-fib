@@ -28,7 +28,7 @@ Scene::Scene()
 {
 	map = NULL;
 	player = NULL;
-	gomba = NULL;
+	std::vector<Gomba*> gombas;
 }
 
 Scene::~Scene()
@@ -37,8 +37,11 @@ Scene::~Scene()
 		delete map;
 	if(player != NULL)
 		delete player;
-	if (gomba != NULL)
-		delete gomba;
+	for (auto& gomba : gombas) {
+		if (gomba != NULL) {
+			delete gomba;
+		}
+	}
 }
 
 
@@ -51,10 +54,16 @@ void Scene::init()
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
 
-	gomba = new Gomba();
-	gomba->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	gomba->setPosition(glm::vec2(INIT_GOMBA_X_TILES * map->getTileSize(), INIT_GOMBA_Y_TILES * map->getTileSize()));
-	gomba->setTileMap(map);
+	// Asegúrate de que el vector esté vacío antes de empezar a añadir Gombas
+	gombas.clear();
+
+	for (int i = 0; i < 0; ++i) {
+		Gomba* newGomba = new Gomba();
+		newGomba->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newGomba->setPosition(glm::vec2((INIT_GOMBA_X_TILES + i * 2) * map->getTileSize(), INIT_GOMBA_Y_TILES * map->getTileSize())); // Puedes cambiar la posición de cada uno si es necesario
+		newGomba->setTileMap(map);
+		gombas.push_back(newGomba);
+	}
 
 	zoomFactor = 5;
 	left = float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor) + 50;
@@ -69,7 +78,9 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
-	gomba->update(deltaTime);
+	for (auto& gomba : gombas) {
+		gomba->update(deltaTime);
+	}
 	projection = glm::ortho(float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor), float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor), bottom, top);
 }
 
@@ -86,7 +97,9 @@ void Scene::render()
 
 	map->render();
 	player->render();
-	gomba->render();
+	for (auto& gomba : gombas) {
+		gomba->render();
+	}
 }
 
 void Scene::initShaders()

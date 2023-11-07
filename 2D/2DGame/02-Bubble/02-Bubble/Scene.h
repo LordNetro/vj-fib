@@ -7,6 +7,7 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "Gomba.h"
+#include <vector>
 
 
 // Scene contains all the entities of our game.
@@ -32,6 +33,7 @@ private:
 	Player* player;
 	Gomba* gomba;
 	ShaderProgram texProgram;
+	std::vector<Gomba*> gombas;  // Vector para almacenar punteros a Gomba
 	float currentTime;
 	glm::mat4 projection;
 	float zoomFactor;

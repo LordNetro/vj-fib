@@ -8,7 +8,14 @@
 #define JUMP_ANGLE_STEP 4
 #define JUMP_HEIGHT 96
 #define FALL_STEP 6
+#include <windows.h>
+#include <string>
+#include <sstream>
 
+void pollaGorda(const std::string& str) {
+	std::wstring wstr = std::wstring(str.begin(), str.end());
+	OutputDebugString(wstr.c_str());
+}
 
 enum PlayerAnims
 {
@@ -65,10 +72,12 @@ void Player::update(int deltaTime)
 	sprite->update(deltaTime);
 	float friction = 0.92f;  // Valor de fricción. 0.92
 
-	glm::vec2 futurePos = posPlayer;  // Creamos una posición futura para verificar colisiones antes de mover al jugador.
-
+	glm::vec2 initPos = posPlayer;
+	glm::vec2 futurePos = initPos;  // Creamos una posición futura para verificar colisiones antes de mover al jugador.
+	pollaGorda("posPlayer x: " + std::to_string(posPlayer.x)+"\n");
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
+		if (speedX == 0) speedX = -1.f;
 		speedX -= accelX;
 		if (speedX < -maxSpeedX) speedX = -maxSpeedX;
 		if (!bJumping) {
@@ -80,6 +89,7 @@ void Player::update(int deltaTime)
 		}
 
 		futurePos.x += speedX;
+		pollaGorda("futurePos x: " + std::to_string(futurePos.x) + "\n");
 
 		if (!map->collisionMoveLeft(futurePos, glm::ivec2(16, 16)))
 			posPlayer.x = futurePos.x;
@@ -91,6 +101,8 @@ void Player::update(int deltaTime)
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
+		futurePos = initPos;
+		if (speedX == 0) speedX = 1.f;
 		speedX += accelX;
 		if (speedX > maxSpeedX) speedX = maxSpeedX;
 		if(!bJumping){
@@ -100,6 +112,7 @@ void Player::update(int deltaTime)
 				sprite->changeAnimation(STOPPING_LEFT);
 			}
 		}
+
 		futurePos.x += speedX;
 
 		if (!map->collisionMoveRight(futurePos, glm::ivec2(16, 16)))
@@ -112,6 +125,7 @@ void Player::update(int deltaTime)
 	}
 	else
 	{
+		futurePos = initPos;
 		speedX *= friction;
 		if (abs(speedX) < 0.5f) speedX = 0.f;
 
@@ -140,10 +154,11 @@ void Player::update(int deltaTime)
 	
 	if(bJumping)
 	{
-		if (speedX < 0 && sprite->animation() != JUMP_LEFT) {
+		futurePos = initPos;
+		if (speedX < 0 && sprite->animation() != JUMP_LEFT || sprite->animation() == STAND_LEFT) {
 			sprite->changeAnimation(JUMP_LEFT);
 		}
-		else if (speedX > 0){
+		else if (speedX > 0 || sprite->animation() == STAND_RIGHT){
 			sprite->changeAnimation(JUMP_RIGHT);
 		}
 		// Lógica para cuando el jugador está saltando.
@@ -168,13 +183,14 @@ void Player::update(int deltaTime)
 	}
 	else
 	{
+		futurePos = initPos;
 		// Logica para cuando el jugador está cayendo.
 		futurePos.y += FALL_STEP;
 		if (!map->collisionMoveDown(futurePos, glm::ivec2(16, 16), &posPlayer.y))
 		{
 			posPlayer.y = futurePos.y;
 		}
-		if (map->collisionMoveDown(futurePos, glm::ivec2(16, 16), &posPlayer.y) && Game::instance().getSpecialKey(GLUT_KEY_UP) && !bJumping)
+		else if (map->collisionMoveDown(futurePos, glm::ivec2(16, 16), &posPlayer.y) && Game::instance().getSpecialKey(GLUT_KEY_UP) && !bJumping)
 		{
 			bJumping = true;
 			jumpAngle = 0;

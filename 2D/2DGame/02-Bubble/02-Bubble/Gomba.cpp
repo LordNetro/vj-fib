@@ -15,11 +15,6 @@ enum GombaAnims
 	MOVE, DIE, STAND_LEFT, STAND_RIGHT
 };
 
-enum Movements
-{
-	LEFT, RIGHT
-};
-
 void Gomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	speedX = 0.f;
@@ -61,9 +56,9 @@ void Gomba::update(int deltaTime)
 	std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
 	// Generar un número aleatorio entre 0 y la cantidad de movimientos - 1.
-	Movements randomMovement = static_cast<Movements>(std::rand() % 2);
+	if (Movement == NULL) Movement = LEFT;
 
-	if (randomMovement == LEFT)
+	if (Movement == LEFT)
 	{
 		speedX -= accelX;
 		if (speedX < -maxSpeedX) speedX = -maxSpeedX;
@@ -82,9 +77,10 @@ void Gomba::update(int deltaTime)
 		{
 			sprite->changeAnimation(STAND_LEFT);
 			speedX = 0;  // Detén el jugador si hay colisión.
+			Movement = RIGHT;
 		}
 	}
-	else if (randomMovement == RIGHT)
+	else if (Movement == RIGHT)
 	{
 		speedX += accelX;
 		if (speedX > maxSpeedX) speedX = maxSpeedX;
@@ -102,6 +98,7 @@ void Gomba::update(int deltaTime)
 		{
 			sprite->changeAnimation(STAND_RIGHT);
 			speedX = 0;  // Detén el jugador si hay colisión.
+			Movement = LEFT;
 		}
 	}
 	else
