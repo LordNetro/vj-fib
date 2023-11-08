@@ -14,10 +14,10 @@
 #define SCREEN_Y 16
 
 #define INIT_PLAYER_X_TILES 4
-#define INIT_PLAYER_Y_TILES 25
+#define INIT_PLAYER_Y_TILES 13
 
 #define INIT_GOMBA_X_TILES 16
-#define INIT_GOMBA_Y_TILES 25
+#define INIT_GOMBA_Y_TILES 13
 
 void print(const std::string& str) {
 	std::wstring wstr = std::wstring(str.begin(), str.end());
@@ -27,6 +27,7 @@ void print(const std::string& str) {
 Scene::Scene()
 {
 	map = NULL;
+	deco = NULL;
 	player = NULL;
 	std::vector<Gomba*> gombas;
 }
@@ -35,6 +36,8 @@ Scene::~Scene()
 {
 	if(map != NULL)
 		delete map;
+	if (deco != NULL)
+		delete deco;
 	if(player != NULL)
 		delete player;
 	for (auto& gomba : gombas) {
@@ -48,7 +51,8 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
-	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = TileMap::createTileMap("levels/barriolevel01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	deco = TileMap::createTileMap("levels/barriolevel01deco.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
@@ -65,11 +69,11 @@ void Scene::init()
 		gombas.push_back(newGomba);
 	}
 
-	zoomFactor = 5;
-	left = float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor) + 50;
-	right = float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor) + 50;
-	top = float(player->posPlayer.y) - (SCREEN_HEIGHT / zoomFactor) - 50;
-	bottom = float(player->posPlayer.y) + (SCREEN_HEIGHT / zoomFactor) - 50;
+	zoomFactor = 6;
+	left = float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor);
+	right = float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor);
+	top = float(player->posPlayer.y) - (SCREEN_HEIGHT / zoomFactor) + 16;
+	bottom = float(player->posPlayer.y) + (SCREEN_HEIGHT / zoomFactor) + 16;
 	projection = glm::ortho(left, right, bottom, top);
 	currentTime = 0.0f;
 }
@@ -95,6 +99,7 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
+	deco->render();
 	map->render();
 	player->render();
 	for (auto& gomba : gombas) {

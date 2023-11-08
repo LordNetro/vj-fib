@@ -30,6 +30,7 @@ private:
 
 private:
 	TileMap *map;
+	TileMap* deco;
 	Player* player;
 	Gomba* gomba;
 	ShaderProgram texProgram;
