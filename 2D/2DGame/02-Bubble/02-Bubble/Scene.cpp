@@ -101,21 +101,37 @@ void Scene::update(int deltaTime)
 
 	//TODO Utilizamos un índice inverso para iterar y eliminar goombas sin problemas
 	for (int i = goombas.size() - 1; i >= 0; --i) {
+		bool update = true;
 		// Asumiendo que posPlayer y posGoomba son glm::ivec2 y representan la esquina inferior izquierda del sprite
-		if (player->isJumpingOrFalling() &&
-			player->posPlayer.x < goombas[i]->posGoomba.x + 16 && // El jugador está a la izquierda del borde derecho del goomba
-			player->posPlayer.x + 16 > goombas[i]->posGoomba.x && // El jugador está a la derecha del borde izquierdo del goomba
-			player->posPlayer.y == goombas[i]->posGoomba.y - 1) { // El jugador está justo encima del goomba
+		if (goombas[i]->isDying) {
+			update = false;
 			delete goombas[i];
 			goombas.erase(goombas.begin() + i); // Elimina el elemento del vector
 		}
-		goombas[i]->update(deltaTime);
+		else if (player->isJumpingOrFalling() &&
+			player->posPlayer.x < goombas[i]->posGoomba.x + 16 && // El jugador está a la izquierda del borde derecho del goomba 16
+			player->posPlayer.x + 16 > goombas[i]->posGoomba.x && // El jugador está a la derecha del borde izquierdo del goomba 16
+			player->posPlayer.y <= goombas[i]->posGoomba.y - 14 &&
+			player->posPlayer.y >= goombas[i]->posGoomba.y - 16) { // El jugador está justo encima del goomba
+			print("DYING DYING DYING DYING");
+			goombas[i]->isDying = true;
+		}
+		else if (
+			player->posPlayer.x + 14 <= goombas[i]->posGoomba.x && // El jugador está a la izquierda del borde derecho del goomba 16
+			player->posPlayer.x >= goombas[i]->posGoomba.x + 16 &&
+			player->posPlayer.y > goombas[i]->posGoomba.y - 13 &&
+			player->posPlayer.y <= goombas[i]->posGoomba.y) {
+			print("HIT HIT HIT HIT");
+		}
+		if(update) goombas[i]->update(deltaTime);
 	}
 
 	// Actualizar koopas
 	for (auto& koopa : koopas) {
 		koopa->update(deltaTime);
 	}
+
+	player->update(deltaTime);
 
 	// Actualización de la proyección
 	projection = glm::ortho(float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor),
