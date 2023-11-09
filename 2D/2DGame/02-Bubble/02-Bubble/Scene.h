@@ -31,6 +31,7 @@ private:
 
 private:
 	TileMap *map;
+	TileMap *deco;
 	Player* player;
 	Goomba* goomba;
 	Koopa* koopa;
