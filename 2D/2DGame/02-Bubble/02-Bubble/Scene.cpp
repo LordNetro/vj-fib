@@ -27,6 +27,7 @@ void print(const std::string& str) {
 	OutputDebugString(wstr.c_str());
 }
 
+//scene constructor
 Scene::Scene()
 {
 	map = NULL;
