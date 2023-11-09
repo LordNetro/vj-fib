@@ -20,7 +20,7 @@ void Goomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	isDying = false;
 	speedX = 0.f;
 	accelX = 0.1f;
-	maxSpeedX = 2.f;
+	maxSpeedX = 1.f;
 	bJumping = false;
 	spritesheet.loadFromFile("images/test2.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.0625, 0.0625), &spritesheet, &shaderProgram);

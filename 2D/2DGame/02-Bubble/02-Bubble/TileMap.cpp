@@ -170,7 +170,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 	{
 		if (map[y * mapSize.x + x] != 0) {
 
-			debugOutput("Choque izquierda!!!\n");
+			//debugOutput("Choque izquierda!!!\n");
 			return true;
 		}
 	}
@@ -183,13 +183,13 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 	int x, y0, y1;
 	
 	x = (pos.x + size.x - 2) / tileSize;
-	debugOutput("XDASDASDASDASDSD: " + std::to_string(x) + "!!!\n");
+	//debugOutput("XDASDASDASDASDSD: " + std::to_string(x) + "!!!\n");
 	y0 = pos.y / tileSize;
 	y1 = (pos.y + size.y - 1) / tileSize;
 	for(int y=y0; y<=y1; y++)
 	{
 		if (map[y * mapSize.x + x] != 0) {
-			debugOutput("Choque derecha!!!\n");
+			//debugOutput("Choque derecha!!!\n");
 			return true;
 		}
 	}
@@ -216,7 +216,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 			if(*posY - tileSize * y + size.y <= 4)
 			{
 				*posY = tileSize * y - size.y;
-				debugOutput("Choque ABAJO!!!\n");
+				//debugOutput("Choque ABAJO!!!\n");
 				return true;
 			}
 		}
@@ -240,7 +240,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int
             if (tileSize * (y + 1) - pos.y <= 4) // Verificamos si la diferencia es menor a 4 píxeles
             {
                 *posY = tileSize * (y + 1); // Ajustamos la posición en Y para evitar la colisión
-				debugOutput("Choque ARRIBA!!!\n");
+				//debugOutput("Choque ARRIBA!!!\n");
                 return true;
             }
         }

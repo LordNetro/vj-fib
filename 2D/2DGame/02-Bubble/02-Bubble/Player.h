@@ -22,7 +22,8 @@ public:
 	void setPosition(const glm::vec2 &pos);
 	bool isJumpingOrFalling();
 	glm::ivec2 posPlayer;
-	
+	bool isDying;
+
 private:
 	bool bJumping;
 	glm::ivec2 tileMapDispl;
