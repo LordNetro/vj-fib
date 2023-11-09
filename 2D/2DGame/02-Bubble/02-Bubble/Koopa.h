@@ -19,13 +19,15 @@ public:
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
 	glm::ivec2 posKoopa;
+	bool isDying;
+	bool isPushed;
+	Movements Movement;
 
 private:
 	bool bJumping;
 	glm::ivec2 tileMapDispl;
 	int jumpAngle, startY;
 	Texture spritesheet;
-	Movements Movement;
 	Sprite* sprite;
 	TileMap* map;
 	float speedX;
