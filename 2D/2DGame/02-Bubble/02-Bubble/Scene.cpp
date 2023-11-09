@@ -16,8 +16,11 @@
 #define INIT_PLAYER_X_TILES 4
 #define INIT_PLAYER_Y_TILES 13
 
-#define INIT_GOMBA_X_TILES 16
-#define INIT_GOMBA_Y_TILES 13
+#define INIT_GOOMBA_X_TILES 16
+#define INIT_GOOMBA_Y_TILES 13
+
+#define INIT_KOOPA_X_TILES 32
+#define INIT_KOOPA_Y_TILES 25
 
 void print(const std::string& str) {
 	std::wstring wstr = std::wstring(str.begin(), str.end());
@@ -29,7 +32,8 @@ Scene::Scene()
 	map = NULL;
 	deco = NULL;
 	player = NULL;
-	std::vector<Gomba*> gombas;
+	std::vector<Goomba*> goombas;
+	std::vector<Koopa*> koopas;
 }
 
 Scene::~Scene()
@@ -40,9 +44,14 @@ Scene::~Scene()
 		delete deco;
 	if(player != NULL)
 		delete player;
-	for (auto& gomba : gombas) {
-		if (gomba != NULL) {
-			delete gomba;
+	for (auto& goomba : goombas) {
+		if (goomba != NULL) {
+			delete goomba;
+		}
+	}
+	for (auto& koopa : koopas) {
+		if (koopa != NULL) {
+			delete koopa;
 		}
 	}
 }
@@ -58,15 +67,26 @@ void Scene::init()
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
 
-	// Asegúrate de que el vector esté vacío antes de empezar a añadir Gombas
-	gombas.clear();
+	// Asegurarse de que el vector estï¿½ vacï¿½o antes de empezar a aï¿½adir Goombas
+	goombas.clear();
 
 	for (int i = 0; i < 5; ++i) {
-		Gomba* newGomba = new Gomba();
-		newGomba->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		newGomba->setPosition(glm::vec2((INIT_GOMBA_X_TILES + i * 2) * map->getTileSize(), INIT_GOMBA_Y_TILES * map->getTileSize())); // Puedes cambiar la posición de cada uno si es necesario
-		newGomba->setTileMap(map);
-		gombas.push_back(newGomba);
+		Goomba* newGoomba = new Goomba();
+		newGoomba->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newGoomba->setPosition(glm::vec2((INIT_GOOMBA_X_TILES + i * 2) * map->getTileSize(), INIT_GOOMBA_Y_TILES * map->getTileSize()));
+		newGoomba->setTileMap(map);
+		goombas.push_back(newGoomba);
+	}
+
+	// Asegurarse de que el vector estï¿½ vacï¿½o antes de empezar a aï¿½adir Koopas
+	koopas.clear();
+
+	for (int i = 0; i < 5; ++i) {
+		Koopa* newKoopa = new Koopa();
+		newKoopa->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newKoopa->setPosition(glm::vec2((INIT_KOOPA_X_TILES + i * 2) * map->getTileSize(), INIT_KOOPA_Y_TILES * map->getTileSize()));
+		newKoopa->setTileMap(map);
+		koopas.push_back(newKoopa);
 	}
 
 	zoomFactor = 6;
@@ -82,10 +102,45 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
-	for (auto& gomba : gombas) {
-		gomba->update(deltaTime);
+
+	//TODO Utilizamos un ï¿½ndice inverso para iterar y eliminar goombas sin problemas
+	for (int i = goombas.size() - 1; i >= 0; --i) {
+		bool update = true;
+		// Asumiendo que posPlayer y posGoomba son glm::ivec2 y representan la esquina inferior izquierda del sprite
+		if (goombas[i]->isDying) {
+			update = false;
+			delete goombas[i];
+			goombas.erase(goombas.begin() + i); // Elimina el elemento del vector
+		}
+		else if (player->isJumpingOrFalling() &&
+			player->posPlayer.x < goombas[i]->posGoomba.x + 16 && // El jugador estï¿½ a la izquierda del borde derecho del goomba 16
+			player->posPlayer.x + 16 > goombas[i]->posGoomba.x && // El jugador estï¿½ a la derecha del borde izquierdo del goomba 16
+			player->posPlayer.y <= goombas[i]->posGoomba.y - 14 &&
+			player->posPlayer.y >= goombas[i]->posGoomba.y - 16) { // El jugador estï¿½ justo encima del goomba
+			print("DYING DYING DYING DYING");
+			goombas[i]->isDying = true;
+		}
+		else if (
+			player->posPlayer.x + 14 <= goombas[i]->posGoomba.x && // El jugador estï¿½ a la izquierda del borde derecho del goomba 16
+			player->posPlayer.x >= goombas[i]->posGoomba.x + 16 &&
+			player->posPlayer.y > goombas[i]->posGoomba.y - 13 &&
+			player->posPlayer.y <= goombas[i]->posGoomba.y) {
+			print("HIT HIT HIT HIT");
+		}
+		if(update) goombas[i]->update(deltaTime);
 	}
-	projection = glm::ortho(float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor), float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor), bottom, top);
+
+	// Actualizar koopas
+	for (auto& koopa : koopas) {
+		koopa->update(deltaTime);
+	}
+
+	player->update(deltaTime);
+
+	// Actualizaciï¿½n de la proyecciï¿½n
+	projection = glm::ortho(float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor),
+		float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor),
+		bottom, top);
 }
 
 void Scene::render()
@@ -102,8 +157,11 @@ void Scene::render()
 	deco->render();
 	map->render();
 	player->render();
-	for (auto& gomba : gombas) {
-		gomba->render();
+	for (auto& goomba : goombas) {
+		goomba->render();
+	}
+	for (auto& koopa : koopas) {
+		koopa->render();
 	}
 }
 

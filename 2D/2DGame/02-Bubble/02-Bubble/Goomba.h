@@ -1,19 +1,15 @@
-#ifndef _GOMBA_INCLUDE
-#define _GOMBA_INCLUDE
+#ifndef _GOOMBA_INCLUDE
+#define _GOOMBA_INCLUDE
 
 
 #include "Sprite.h"
 #include "TileMap.h"
 
 
-// Gomba is basically a Sprite that represents the enemy. As such it has
+// Goomba is basically a Sprite that represents the enemy. As such it has
 // all properties it needs to track its movement, jumping, and collisions.
-enum Movements
-{
-	LEFT, RIGHT
-};
 
-class Gomba
+class Goomba
 {
 
 public:
@@ -23,7 +19,8 @@ public:
 
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
-	glm::ivec2 posGomba;
+	glm::ivec2 posGoomba;
+	bool isDying;
 
 private:
 	bool bJumping;
@@ -40,6 +37,6 @@ private:
 };
 
 
-#endif // _GOMBA_INCLUDE
+#endif // _GOOMBA_INCLUDE
 
 
