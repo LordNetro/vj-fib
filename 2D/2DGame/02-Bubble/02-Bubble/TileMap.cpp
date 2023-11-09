@@ -89,8 +89,10 @@ bool TileMap::loadLevel(const string &levelFile)
 		for(int i=0; i<mapSize.x; i++)
 		{
 			fin.get(tile);
-			if(tile == ' ')
-				map[j*mapSize.x+i] = 0;
+			if (tile == ' ')
+				map[j * mapSize.x + i] = 0;
+			else if (tile == ',')
+				;
 			else
 				map[j*mapSize.x+i] = tile - int('0');
 		}

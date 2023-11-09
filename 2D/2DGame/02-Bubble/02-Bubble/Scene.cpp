@@ -14,10 +14,10 @@
 #define SCREEN_Y 16
 
 #define INIT_PLAYER_X_TILES 4
-#define INIT_PLAYER_Y_TILES 25
+#define INIT_PLAYER_Y_TILES 13
 
 #define INIT_GOOMBA_X_TILES 16
-#define INIT_GOOMBA_Y_TILES 25
+#define INIT_GOOMBA_Y_TILES 13
 
 #define INIT_KOOPA_X_TILES 32
 #define INIT_KOOPA_Y_TILES 25
@@ -30,6 +30,7 @@ void print(const std::string& str) {
 Scene::Scene()
 {
 	map = NULL;
+	deco = NULL;
 	player = NULL;
 	std::vector<Goomba*> goombas;
 	std::vector<Koopa*> koopas;
@@ -39,6 +40,8 @@ Scene::~Scene()
 {
 	if(map != NULL)
 		delete map;
+	if (deco != NULL)
+		delete deco;
 	if(player != NULL)
 		delete player;
 	for (auto& goomba : goombas) {
@@ -57,13 +60,14 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
-	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = TileMap::createTileMap("levels/barriolevel01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	deco = TileMap::createTileMap("levels/barriolevel01deco.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
 
-	// Asegurarse de que el vector est� vac�o antes de empezar a a�adir Goombas
+	// Asegurarse de que el vector estï¿½ vacï¿½o antes de empezar a aï¿½adir Goombas
 	goombas.clear();
 
 	for (int i = 0; i < 1; ++i) {
@@ -74,7 +78,7 @@ void Scene::init()
 		goombas.push_back(newGoomba);
 	}
 
-	// Asegurarse de que el vector est� vac�o antes de empezar a a�adir Koopas
+	// Asegurarse de que el vector estï¿½ vacï¿½o antes de empezar a aï¿½adir Koopas
 	koopas.clear();
 
 	for (int i = 0; i < 1; ++i) {
@@ -85,11 +89,11 @@ void Scene::init()
 		koopas.push_back(newKoopa);
 	}
 
-	zoomFactor = 5;
-	left = float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor) + 50;
-	right = float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor) + 50;
-	top = float(player->posPlayer.y) - (SCREEN_HEIGHT / zoomFactor) - 50;
-	bottom = float(player->posPlayer.y) + (SCREEN_HEIGHT / zoomFactor) - 50;
+	zoomFactor = 6;
+	left = float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor);
+	right = float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor);
+	top = float(player->posPlayer.y) - (SCREEN_HEIGHT / zoomFactor) + 16;
+	bottom = float(player->posPlayer.y) + (SCREEN_HEIGHT / zoomFactor) + 16;
 	projection = glm::ortho(left, right, bottom, top);
 	currentTime = 0.0f;
 }
@@ -98,8 +102,13 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
+
+
+	//TODO Utilizamos un ï¿½ndice inverso para iterar y eliminar goombas sin problemas
+=======
 	//print("SPAWN: " + std::to_string(INIT_PLAYER_Y_TILES * map->getTileSize()));
-	//TODO Utilizamos un �ndice inverso para iterar y eliminar goombas sin problemas
+	//TODO Utilizamos un índice inverso para iterar y eliminar goombas sin problemas
+
 	for (int i = goombas.size() - 1; i >= 0; --i) {
 		bool update = true;
 		// Asumiendo que posPlayer y posGoomba son glm::ivec2 y representan la esquina inferior izquierda del sprite
@@ -109,17 +118,26 @@ void Scene::update(int deltaTime)
 			goombas.erase(goombas.begin() + i); // Elimina el elemento del vector
 		}
 		else if (player->isJumpingOrFalling() &&
-			player->posPlayer.x < goombas[i]->posGoomba.x + 16 && // El jugador est� a la izquierda del borde derecho del goomba 16
-			player->posPlayer.x + 16 > goombas[i]->posGoomba.x && // El jugador est� a la derecha del borde izquierdo del goomba 16
+			player->posPlayer.x < goombas[i]->posGoomba.x + 16 && // El jugador estï¿½ a la izquierda del borde derecho del goomba 16
+			player->posPlayer.x + 16 > goombas[i]->posGoomba.x && // El jugador estï¿½ a la derecha del borde izquierdo del goomba 16
 			player->posPlayer.y <= goombas[i]->posGoomba.y - 14 &&
-			player->posPlayer.y >= goombas[i]->posGoomba.y - 17) { // El jugador est� justo encima del goomba
+
+			player->posPlayer.y >= goombas[i]->posGoomba.y - 16) { // El jugador estï¿½ justo encima del goomba
+			player->posPlayer.y >= goombas[i]->posGoomba.y - 17) { // El jugador está justo encima del goomba
+
 			print("DYING DYING DYING DYING");
 			goombas[i]->isDying = true;
 		}
 		else if (
-			player->posPlayer.x + 16 >= goombas[i]->posGoomba.x && // El jugador est� a la izquierda del borde derecho del goomba 16
+
+			player->posPlayer.x + 14 <= goombas[i]->posGoomba.x && // El jugador estï¿½ a la izquierda del borde derecho del goomba 16
+			player->posPlayer.x >= goombas[i]->posGoomba.x + 16 &&
+			player->posPlayer.y > goombas[i]->posGoomba.y - 13 &&
+
+			player->posPlayer.x + 16 >= goombas[i]->posGoomba.x && // El jugador está a la izquierda del borde derecho del goomba 16
 			player->posPlayer.x <= goombas[i]->posGoomba.x + 16 &&
 			player->posPlayer.y > goombas[i]->posGoomba.y - 14 &&
+
 			player->posPlayer.y <= goombas[i]->posGoomba.y) {
 			print("HIT HIT HIT HIT\n");
 			player->isDying = true;
@@ -127,7 +145,7 @@ void Scene::update(int deltaTime)
 		if(update) goombas[i]->update(deltaTime);
 	}
 
-	//TODO Utilizamos un �ndice inverso para iterar y eliminar koopas sin problemas
+	//TODO Utilizamos un índice inverso para iterar y eliminar koopas sin problemas
 	for (int i = koopas.size() - 1; i >= 0; --i) {
 		bool update = true;
 		// Asumiendo que posPlayer y posKoopa son glm::ivec2 y representan la esquina inferior izquierda del sprite
@@ -139,16 +157,16 @@ void Scene::update(int deltaTime)
 		//print("posPlayer.y: " + std::to_string(player->posPlayer.y) + "\n");
 		//print("posKoopa.y: " + std::to_string(koopas[i]->posKoopa.y) + "\n");
 		/*else*/if (player->isJumpingOrFalling() &&
-			player->posPlayer.x < koopas[i]->posKoopa.x + 16 && // El jugador est� a la izquierda del borde derecho del goomba 16
-			player->posPlayer.x + 16 > koopas[i]->posKoopa.x && // El jugador est� a la derecha del borde izquierdo del goomba 16
+			player->posPlayer.x < koopas[i]->posKoopa.x + 16 && // El jugador está a la izquierda del borde derecho del goomba 16
+			player->posPlayer.x + 16 > koopas[i]->posKoopa.x && // El jugador está a la derecha del borde izquierdo del goomba 16
 			player->posPlayer.y <= koopas[i]->posKoopa.y - 22 &&
 			player->posPlayer.y >= koopas[i]->posKoopa.y - 25 &&
-			!koopas[i]->isDying && !koopas[i]->isPushed) { // El jugador est� justo encima del goomba
+			!koopas[i]->isDying && !koopas[i]->isPushed) { // El jugador está justo encima del goomba
 			print("DYING DYING DYING DYING");
 			koopas[i]->isDying = true;
 		}
 		else if (
-			player->posPlayer.x + 16 >= koopas[i]->posKoopa.x && // El jugador est� a la izquierda del borde derecho del goomba 16
+			player->posPlayer.x + 16 >= koopas[i]->posKoopa.x && // El jugador está a la izquierda del borde derecho del goomba 16
 			player->posPlayer.x <= koopas[i]->posKoopa.x + 16 &&
 			player->posPlayer.y > koopas[i]->posKoopa.y - 22 + 8 &&
 			player->posPlayer.y <= koopas[i]->posKoopa.y + 8) {
@@ -166,7 +184,7 @@ void Scene::update(int deltaTime)
 	}
 
 
-	// Actualizaci�n de la proyecci�n
+	// Actualizaciï¿½n de la proyecciï¿½n
 	projection = glm::ortho(float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor),
 		float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor),
 		bottom, top);
@@ -183,6 +201,7 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
+	deco->render();
 	map->render();
 	player->render();
 	for (auto& goomba : goombas) {
