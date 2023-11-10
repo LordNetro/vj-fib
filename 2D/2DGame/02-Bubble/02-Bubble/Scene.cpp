@@ -64,6 +64,8 @@ Scene::~Scene()
 	for (auto& letter : letters) {
 		if (letter != NULL) {
 			delete letter;
+		}
+	}
 	for (auto& powerup : powerups) {
 		if (powerup != NULL) {
 			delete powerup;
@@ -142,7 +144,7 @@ void Scene::init()
 //char majus to lletra
 int Scene::cl(char c) {
 	return c - 'A' + 10;
-};
+}
 
 void Scene::update(int deltaTime)
 {
@@ -361,4 +363,4 @@ void Scene::initShaders()
 	vShader.free();
 	fShader.free();
 }
-}
+
