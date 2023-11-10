@@ -33,10 +33,19 @@ void Letter::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, in
     
     for (int i = 0; i < 43; ++i) {
         la = static_cast<LetterAnims>(i);
-        sprite->setAnimationSpeed(la, 8);
-        sprite->addKeyframe(la, glm::vec2(0.0625f*float(i%16), float((i>>4)/4.0) + (i >> 4)*0.075 + 0.03));
+        sprite->setAnimationSpeed(i, 8);
+        sprite->addKeyframe(i, glm::vec2(0.0625f*float(i%16), float((i>>4)/4.0) + (i >> 4)*0.075 + 0.03));
     }
     
+    /*
+    sprite->setNumberAnimations(2);
+
+    sprite->setAnimationSpeed(ZERO, 8);
+    sprite->addKeyframe(ZERO, glm::vec2(0.f, 0.f));
+
+    sprite->setAnimationSpeed(ONE, 8);
+    sprite->addKeyframe(ONE, glm::vec2(0.0625f, 0.f));
+    */
 
     sprite->changeAnimation(letter);
     tileMapDispl = tileMapPos;
