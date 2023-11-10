@@ -21,7 +21,7 @@ void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	isPushed = false;
 	speedX = 0.f;
 	accelX = 0.1f;
-	maxSpeedX = 2.f;
+	maxSpeedX = 1.f;
 	bJumping = false;
 	spritesheet.loadFromFile("images/super_barrio_koopa.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(16, 24), glm::vec2(0.0625f, 0.09375f), &spritesheet, &shaderProgram);
@@ -62,7 +62,7 @@ void Koopa::update(int deltaTime)
 
 	if (!isDying) {
 		if (Movement == NULL) Movement = LEFT;
-
+		if (isPushed && sprite->animation() != MOVE_DEAD) sprite->changeAnimation(MOVE_DEAD);
 		if (Movement == LEFT)
 		{
 			speedX -= accelX;
@@ -77,7 +77,7 @@ void Koopa::update(int deltaTime)
 				posKoopa.x = futurePos.x;
 			else
 			{
-				sprite->changeAnimation(STAND_LEFT);
+				if(!isPushed)sprite->changeAnimation(STAND_LEFT);
 				speedX = 0;  // Detén el koopa si hay colisión.
 				Movement = RIGHT;
 			}
@@ -87,7 +87,7 @@ void Koopa::update(int deltaTime)
 			speedX += accelX;
 			if (speedX > maxSpeedX) speedX = maxSpeedX;
 
-			if (speedX > 0 && sprite->animation() != MOVE_RIGHT)
+			if (!isPushed && speedX > 0 && sprite->animation() != MOVE_RIGHT)
 				sprite->changeAnimation(MOVE_RIGHT);
 
 			futurePos.x += speedX;
@@ -96,7 +96,7 @@ void Koopa::update(int deltaTime)
 				posKoopa.x = futurePos.x;
 			else
 			{
-				sprite->changeAnimation(STAND_RIGHT);
+				if(!isPushed)sprite->changeAnimation(STAND_RIGHT);
 				speedX = 0;  // Detén el koopa si hay colisión.
 				Movement = LEFT;
 			}
@@ -109,20 +109,20 @@ void Koopa::update(int deltaTime)
 			futurePos.x += speedX;
 
 			if (speedX < 0 && !map->collisionMoveLeft(futurePos, glm::ivec2(16, 24))) {
-				if (sprite->animation() != MOVE_LEFT) sprite->changeAnimation(MOVE_LEFT);
+				if (!isPushed && sprite->animation() != MOVE_LEFT) sprite->changeAnimation(MOVE_LEFT);
 				posKoopa.x = futurePos.x;
 			}
 			else if (speedX > 0 && !map->collisionMoveRight(futurePos, glm::ivec2(16, 24))) {
-				if (sprite->animation() != MOVE_RIGHT) sprite->changeAnimation(MOVE_RIGHT);
+				if (!isPushed && sprite->animation() != MOVE_RIGHT) sprite->changeAnimation(MOVE_RIGHT);
 				posKoopa.x = futurePos.x;
 			}
 			else {
 				speedX = 0;
-				if (sprite->animation() == MOVE_LEFT) {
+				if (!isPushed && sprite->animation() == MOVE_LEFT) {
 					sprite->changeAnimation(STAND_LEFT);
 				}
 				else {
-					sprite->changeAnimation(STAND_RIGHT);
+					if(!isPushed)sprite->changeAnimation(STAND_RIGHT);
 				}
 			}
 		}
@@ -139,7 +139,8 @@ void Koopa::update(int deltaTime)
 			else
 			{
 				futurePos.y = int(startY - JUMP_HEIGHT * sin(3.14159f * jumpAngle / 180.f));
-				if (!map->collisionMoveDown(futurePos, glm::ivec2(16, 24), &posKoopa.y) && !map->collisionMoveUp(futurePos, glm::ivec2(16, 24), &posKoopa.y))
+				int xda = 0;
+				if (!map->collisionMoveDown(futurePos, glm::ivec2(16, 24), &posKoopa.y ) && !map->collisionMoveUp(futurePos, glm::ivec2(16, 24), &posKoopa.y, xda, false))
 				{
 					posKoopa.y = futurePos.y;
 				}

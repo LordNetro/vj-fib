@@ -23,13 +23,25 @@ public:
 	bool isJumpingOrFalling();
 	glm::ivec2 posPlayer;
 	bool isDying;
+	bool breakedBlock;
+	bool powerupBlock;
+	int drugType;
+	bool changed;
+	bool isInvincible;
+	bool isInvincibleHigh;
+	float invincibleTimer;
+	float invincibleDuration; // 2 segundos
+	int altura;
 
 private:
 	bool bJumping;
 	glm::ivec2 tileMapDispl;
 	int jumpAngle, startY;
 	Texture spritesheet;
-	Sprite *sprite;
+	ShaderProgram shaderProgram;
+	Sprite* sprite;
+	Sprite* sprite_small;
+	Sprite *sprite_high;
 	TileMap *map;
 	float speedX;          // Velocidad horizontal actual del jugador
 	float accelX;    // Aceleración horizontal

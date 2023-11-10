@@ -15,13 +15,14 @@ public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	void update(int deltaTime);
 	void render();
-
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
 	glm::ivec2 posKoopa;
 	bool isDying;
 	bool isPushed;
 	Movements Movement;
+	float accelX;
+
 
 private:
 	bool bJumping;
@@ -31,7 +32,6 @@ private:
 	Sprite* sprite;
 	TileMap* map;
 	float speedX;
-	float accelX;
 	float maxSpeedX;
 
 };

@@ -180,7 +180,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 {
 	int x, y0, y1;
 	
-	x = (pos.x + size.x - 2) / tileSize;
+	x = (pos.x + size.x - 1) / tileSize;
 	//debugOutput("XDASDASDASDASDSD: " + std::to_string(x) + "!!!\n");
 	y0 = pos.y / tileSize;
 	y1 = (pos.y + size.y - 1) / tileSize;
@@ -199,7 +199,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 {
 	int x0, x1, y;
 	//debugOutput("TILE SIZE: " + std::to_string(tileSize) + "!!!\n");
-	x0 = (pos.x + 1) / tileSize;
+	x0 = pos.x / tileSize;
 	//debugOutput("x0: " + std::to_string(x0) + "!!!\n");
 	x1 = (pos.x + size.x - 1) / tileSize;
 	//debugOutput("x1: " + std::to_string(x1) + "!!!\n");
@@ -211,10 +211,10 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	{
 		if(map[y*mapSize.x+x] != 0)
 		{
-			if(*posY - tileSize * y + size.y <= 4)
+			if(*posY - tileSize * y + size.y <= 6)
 			{
-				*posY = tileSize * y - size.y;
 				//debugOutput("Choque ABAJO!!!\n");
+				*posY = tileSize * y - size.y;
 				return true;
 			}
 		}
@@ -223,7 +223,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	return false;
 }
 
-bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const
+bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY, int &blockType, bool breakable) const
 {
     int x0, x1, y;
 
@@ -233,16 +233,21 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int
 
     for (int x=x0; x<=x1; x++)
     {
-        if (map[y*mapSize.x+x] != 0) // Comprobamos si el tile no es vacío (es sólido)
+		blockType = map[(y - 1) * mapSize.x + x];
+		if (map[(y-1)*mapSize.x + x] != 0) // Comprobamos si el tile no es vacío (es sólido)
         {
-            if (tileSize * (y + 1) - pos.y <= 4) // Verificamos si la diferencia es menor a 4 píxeles
+			//debugOutput("CASI ARRIBA!!!\n");
+            if (tileSize * (y + 1) - pos.y <= 6) // Verificamos si la diferencia es menor a 4 píxeles
             {
-                *posY = tileSize * (y + 1); // Ajustamos la posición en Y para evitar la colisión
+				//debugOutput("blockType = " + std::to_string(blockType) + "\n");
+                *posY = tileSize * y + 1; // Ajustamos la posición en Y para evitar la colisión
+				if (blockType == 3) map[(y - 1) * mapSize.x + x] = 0;
+				else if (blockType == 13) map[(y - 1) * mapSize.x + x] = 99;
 				//debugOutput("Choque ARRIBA!!!\n");
                 return true;
             }
         }
     }
-
+	blockType = 0;
     return false;
 }

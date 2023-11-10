@@ -22,7 +22,7 @@ void Goomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	accelX = 0.1f;
 	maxSpeedX = 1.f;
 	bJumping = false;
-	spritesheet.loadFromFile("images/test2.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/super_barrio_spritesheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.0625, 0.0625), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(4);
 
@@ -133,7 +133,8 @@ void Goomba::update(int deltaTime)
 			else
 			{
 				futurePos.y = int(startY - JUMP_HEIGHT * sin(3.14159f * jumpAngle / 180.f));
-				if (!map->collisionMoveDown(futurePos, glm::ivec2(16, 16), &posGoomba.y) && !map->collisionMoveUp(futurePos, glm::ivec2(16, 16), &posGoomba.y))
+				int xd = 0;
+				if (!map->collisionMoveDown(futurePos, glm::ivec2(16, 16), &posGoomba.y) && !map->collisionMoveUp(futurePos, glm::ivec2(16, 16), &posGoomba.y, xd, false))
 				{
 					posGoomba.y = futurePos.y;
 				}

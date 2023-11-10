@@ -64,6 +64,9 @@ Scene::~Scene()
 	for (auto& letter : letters) {
 		if (letter != NULL) {
 			delete letter;
+	for (auto& powerup : powerups) {
+		if (powerup != NULL) {
+			delete powerup;
 		}
 	}
 }
@@ -72,8 +75,9 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
-	map = TileMap::createTileMap("levels/barriolevel02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	deco = TileMap::createTileMap("levels/barriolevel02deco.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	highMode = false;
+	map = TileMap::createTileMap("levels/barriolevel01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	deco = TileMap::createTileMap("levels/barriolevel01deco.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
@@ -115,6 +119,16 @@ void Scene::init()
 		newLetter->setTileMap(map);
 		letters.push_back(newLetter);
 	}
+	// Asegurarse de que el vector estï¿½ vacï¿½o antes de empezar a aï¿½adir Koopas
+	powerups.clear();
+
+	for (int i = 0; i < 4; ++i) {
+		Powerup* newPowerup = new Powerup();
+		newPowerup->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, i%2 == 0);
+		newPowerup->setPosition(glm::vec2((INIT_KOOPA_X_TILES + i * 2) * map->getTileSize(), INIT_KOOPA_Y_TILES * map->getTileSize()));
+		newPowerup->setTileMap(map);
+		powerups.push_back(newPowerup);
+	}
 
 	zoomFactor = 6;
 	left = float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor);
@@ -134,6 +148,16 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
+	if (player->powerupBlock) {
+		std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
+		// Generar bool aleatoria para generar el powerup (lucky try)
+		Powerup* newPowerup = new Powerup();
+		newPowerup->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, std::rand() % 2 == 0);
+		newPowerup->setPosition(glm::vec2(player->posPlayer.x, player->posPlayer.y - map->getTileSize()*2));
+		newPowerup->setTileMap(map);
+		powerups.push_back(newPowerup);
+	}
 	//print("SPAWN: " + std::to_string(INIT_PLAYER_Y_TILES * map->getTileSize()));
 	//TODO Utilizamos un índice inverso para iterar y eliminar goombas sin problemas
 	for (int i = goombas.size() - 1; i >= 0; --i) {
@@ -149,16 +173,29 @@ void Scene::update(int deltaTime)
 			player->posPlayer.x + 16 > goombas[i]->posGoomba.x && // El jugador está a la derecha del borde izquierdo del goomba 16
 			player->posPlayer.y <= goombas[i]->posGoomba.y - 14 &&
 			player->posPlayer.y >= goombas[i]->posGoomba.y - 17) { // El jugador está justo encima del goomba
+
 			print("DYING DYING DYING DYING");
 			goombas[i]->isDying = true;
 		}
 		else if (
 			player->posPlayer.x + 16 >= goombas[i]->posGoomba.x && // El jugador está a la izquierda del borde derecho del goomba 16
 			player->posPlayer.x <= goombas[i]->posGoomba.x + 16 &&
-			player->posPlayer.y > goombas[i]->posGoomba.y - 14 &&
+			player->posPlayer.y > goombas[i]->posGoomba.y - player->altura-2 &&
 			player->posPlayer.y <= goombas[i]->posGoomba.y) {
 			print("HIT HIT HIT HIT\n");
-			player->isDying = true;
+			if (player->isInvincibleHigh) {
+				goombas[i]->isDying = true;
+			}
+			else if (player->drugType == 1) {
+				player->isInvincible = true;
+				player->invincibleTimer = 0.f;
+				player->invincibleDuration = 2.f;
+				player->drugType = 0;
+				player->changed = false;
+			}
+			else if (!player->isInvincible){
+				player->isDying = true;
+			}
 		}
 		if (update) goombas[i]->update(deltaTime);
 	}
@@ -167,7 +204,7 @@ void Scene::update(int deltaTime)
 	for (int i = koopas.size() - 1; i >= 0; --i) {
 		bool update = true;
 		// Asumiendo que posPlayer y posKoopa son glm::ivec2 y representan la esquina inferior izquierda del sprite
-		//if (koopas[i]->isDying) {
+		//TODO if (koopas[i]->isDying) {
 			//update = false;
 			//delete koopas[i];
 			//koopas.erase(koopas.begin() + i); // Elimina el elemento del vector
@@ -190,12 +227,34 @@ void Scene::update(int deltaTime)
 			player->posPlayer.y <= koopas[i]->posKoopa.y + 8) {
 			if (!koopas[i]->isDying) {
 				print("HIT HIT HIT HIT\n");
-				player->isDying = true;
+				if (player->isInvincibleHigh) {
+					koopas[i]->isDying = true;
+				}
+				else if (player->drugType == 1) {
+					player->isInvincible = true;
+					player->invincibleTimer = 0.f;
+					player->invincibleDuration = 2.f;
+					player->drugType = 0;
+					player->changed = false;
+				}
+				else if (!player->isInvincible){
+					player->isDying = true;
+				}
+
 			}
 			else if (!koopas[i]->isPushed) {
 				print("PUSHED PUSHED PUSHED PUSHED\n");
-				player->isDying = false;
+				koopas[i]->isDying = false;
 				koopas[i]->isPushed = true;
+				koopas[i]->accelX = 1.f;
+				if (player->posPlayer.x <= koopas[i]->posKoopa.x + 8) {
+					koopas[i]->Movement = RIGHT;
+					koopas[i]->posKoopa = glm::ivec2(player->posPlayer.x + 30, player->posPlayer.y);
+				}
+				else {
+					koopas[i]->Movement = LEFT;
+					koopas[i]->posKoopa = glm::ivec2(player->posPlayer.x - 30, player->posPlayer.y);
+				}
 			}
 		}
 		if (update) koopas[i]->update(deltaTime);
@@ -209,7 +268,34 @@ void Scene::update(int deltaTime)
 	}
 
 
+	//TODO Utilizamos un índice inverso para iterar y eliminar koopas sin problemas
+	for (int i = powerups.size() - 1; i >= 0; --i) {
+		bool update = true;
+		if (player->posPlayer.x < powerups[i]->posPowerup.x + 16 && // El jugador está a la izquierda del borde derecho del powerup 16
+			player->posPlayer.x + 16 > powerups[i]->posPowerup.x && // El jugador está a la derecha del borde izquierdo del powerup 16
+			player->posPlayer.y <= powerups[i]->posPowerup.y &&
+			player->posPlayer.y >= powerups[i]->posPowerup.y - 16) { // El jugador está justo encima del goomba
+			print("PICKED UP!!!");
+			if (powerups[i]->isJoint) {
+				player->isInvincible = true;
+				player->isInvincibleHigh = true;
+				player->invincibleTimer = 0.f;
+				player->invincibleDuration = 6.f;
+			}
+			else {
+				player->drugType = 1;
+				player->changed = false;
+			}
+			
+			update = false;
+			delete powerups[i];
+			powerups.erase(powerups.begin() + i); // Elimina el elemento del vector
 
+		}
+		if (update) powerups[i]->update(deltaTime);
+	}
+	if (player->isInvincibleHigh) highMode = true;
+	else highMode = false;
 	// Actualización de la proyección
 	projection = glm::ortho(float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor),
 		float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor),
@@ -238,6 +324,9 @@ void Scene::render()
 	}
 	for (auto& letter : letters) {
 		letter->render();
+	}
+	for (auto& powerup : powerups) {
+		powerup->render();
 	}
 }
 
@@ -271,4 +360,5 @@ void Scene::initShaders()
 	texProgram.bindFragmentOutput("outColor");
 	vShader.free();
 	fShader.free();
+}
 }

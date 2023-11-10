@@ -17,6 +17,7 @@
     <ClInclude Include="Koopa.h" />
     <ClInclude Include="Letter.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Powerup.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneIntro.h" />
     <ClInclude Include="Shader.h" />
@@ -32,6 +33,7 @@
     <ClCompile Include="Letter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Powerup.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneIntro.cpp" />
     <ClCompile Include="Shader.cpp" />
