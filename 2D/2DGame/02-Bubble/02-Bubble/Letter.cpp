@@ -49,13 +49,25 @@ void Letter::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, in
 
     sprite->changeAnimation(letter);
     tileMapDispl = tileMapPos;
-    sprite->setPosition(glm::vec2( float(tileMapDispl.x + posLetter.x), float(tileMapDispl.y + posLetter.y)));
+    sprite->setPosition(glm::vec2(float(tileMapDispl.x + posLetter.x), float(posLetter.y - 8)));
 }
 
 void Letter::update(int deltaTime)
 {
+    if (currentLetter == 42 && Game::instance().getSpecialKey(GLUT_KEY_DOWN) && isPlay) {
+        sprite->setPosition(glm::vec2(float(tileMapDispl.x + posLetter.x), float(posLetter.y)+8));
+        isPlay = false;
+    }
+    if (currentLetter == 42 && Game::instance().getSpecialKey(GLUT_KEY_UP) && !isPlay) {
+        sprite->setPosition(glm::vec2(float(tileMapDispl.x + posLetter.x), float(posLetter.y)-8));
+        isPlay = true;
+    }
+    sprite->changeAnimation(42);
     sprite->update(deltaTime);
-    sprite->changeAnimation(currentLetter);
+    
+}
+bool Letter::isOnPlay( ) {
+    return isPlay;
 }
 
 void Letter::render()

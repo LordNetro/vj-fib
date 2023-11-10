@@ -247,6 +247,8 @@ void Scene::spawnEnemies() {
 
 void Scene::init()
 {
+	isInitialized = true;
+
 	initShaders();
 	highMode = false;
 	map = TileMap::createTileMap("levels/barriolevel01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -281,13 +283,15 @@ void Scene::init()
 
 	spawnEnemies();
 
-	zoomFactor = 6;
+	zoomFactor = 6.0;
 	left = float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor) + 96;
 	right = float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor) + 96;
 	top = float(player->posPlayer.y) - (SCREEN_HEIGHT / zoomFactor) - 12;
 	bottom = float(player->posPlayer.y) + (SCREEN_HEIGHT / zoomFactor) - 12;
 	projection = glm::ortho(left, right, bottom, top);
 	currentTime = 0.0f;
+
+	isInitialized = true;
 }
 
 //char majus to lletra

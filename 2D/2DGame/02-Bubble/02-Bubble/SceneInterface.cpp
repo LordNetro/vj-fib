@@ -29,6 +29,8 @@ SceneInterface::~SceneInterface()
 
 void SceneInterface::init()
 {
+	isInitialized = true;
+
 	initShaders();
 	map = TileMap::createTileMap("interface/template.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	
@@ -40,6 +42,8 @@ void SceneInterface::init()
 	
 	projection = glm::ortho(left+48, right+48, top-100, bottom+16);
 	currentTime = 0.0f;
+
+	isInitialized = true;
 }
 
 void SceneInterface::update(int deltaTime)

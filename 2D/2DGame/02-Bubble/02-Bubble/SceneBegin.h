@@ -23,13 +23,18 @@ public:
 	void init();
 	void update(int deltaTime);
 	void render();
+	bool isInitialized = false;
+	bool SceneBegin::isBegin();
 
 private:
 	void initShaders();
 
 private:
 	TileMap *map;
+	TileMap* map2;
 	TileMap* title;
+	Letter* pointer;
+	bool beginGame = false;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
@@ -38,6 +43,8 @@ private:
 	float right;
 	float top;
 	float bottom;
+
+
 };
 
 

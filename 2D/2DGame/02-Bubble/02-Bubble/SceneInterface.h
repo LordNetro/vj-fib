@@ -23,6 +23,8 @@ public:
 	void update(int deltaTime);
 	void render();
 
+	bool isInitialized = false;
+
 private:
 	void initShaders();
 
@@ -39,5 +41,5 @@ private:
 };
 
 
-#endif // _SCENEINTERFACE_INCLUDE
+#endif // _SCENEINTRO_INCLUDE
 

@@ -13,24 +13,49 @@
 #define SCREEN_X 32
 #define SCREEN_Y 16
 
+#define INIT_POINTER_X_TILES 15
+#define INIT_POINTER_Y_TILES 24
+
 
 //scene constructor
 SceneBegin::SceneBegin()
 {
 	map = NULL;
+	map2 = NULL;
+	title = NULL;
+	pointer = NULL;
+	
 }
 
 SceneBegin::~SceneBegin()
 {
-	if (map != NULL)
+	if (map != NULL) {
 		delete map;
+	}
+	if (map2 != NULL) {
+		delete map2;
+	}
+	if (title != NULL) {
+		delete title;
+	}
+	if (pointer != NULL) {
+		delete pointer;
+	}
 }
 
 
 void SceneBegin::init()
 {
+	isInitialized = true;
+
 	initShaders();
-	map = TileMap::createTileMap("interface/template.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = TileMap::createTileMap("interface/templateBegin.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+
+	Letter* newLetter = new Letter();
+	newLetter->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 42);
+	newLetter->setPosition(glm::vec2((INIT_POINTER_X_TILES) * map->getTileSize(), INIT_POINTER_Y_TILES * map->getTileSize()));
+	newLetter->setTileMap(map);
+	pointer = newLetter;
 	
 	zoomFactor = 4;
 	left = 0;
@@ -40,12 +65,20 @@ void SceneBegin::init()
 	
 	projection = glm::ortho(left+48, right+48, top-100, bottom+16);
 	currentTime = 0.0f;
+	isInitialized = true;
 }
 
 void SceneBegin::update(int deltaTime)
 {
 	currentTime += deltaTime;
+	pointer->update(deltaTime);
+	if (pointer->isOnPlay() && Game::instance().getKey('z')) {
+		beginGame = true;
+	}
+}
 
+bool SceneBegin::isBegin() {
+	return beginGame;
 }
 
 void SceneBegin::render()
@@ -60,6 +93,8 @@ void SceneBegin::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
 	map->render();
+	pointer->render();
+
 }
 
 void SceneBegin::initShaders()

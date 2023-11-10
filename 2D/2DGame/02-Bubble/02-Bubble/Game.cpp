@@ -8,9 +8,21 @@
 void Game::init()
 {
 	bPlay = true;
-	glClearColor(148/255.0f, 148/255.0f, 1.0f, 1.0f);
-	scene.init();
-	interface.init();
+	glClearColor(148 / 255.0f, 148 / 255.0f, 1.0f, 1.0f);
+	switch (pantallaActual) {
+		case 0:
+			sceneBegin.init();
+			interface.init();
+			break;
+		case 1:
+			scene.init();
+			interface.init();
+			break;
+		case 2:
+			scene.init();
+			interface.init();
+			break;
+	}
 }
 
 void Game::resetFirstLevel()
@@ -20,9 +32,32 @@ void Game::resetFirstLevel()
 }
 
 bool Game::update(int deltaTime)
-{
-	scene.update(deltaTime);
-	interface.update(deltaTime);
+{	
+	switch (pantallaActual) {
+	case 0:
+		if (sceneBegin.isInitialized) sceneBegin.update(deltaTime);
+		else sceneBegin.init();
+
+		if (interface.isInitialized) interface.update(deltaTime);
+		else interface.init();
+		break;
+	case 1:
+		if (scene.isInitialized) scene.update(deltaTime);
+		else scene.init();
+		if (interface.isInitialized) interface.update(deltaTime);
+		else interface.init();
+		break;
+	case 2:
+		if (scene.isInitialized) scene.update(deltaTime);
+		else scene.init();
+		if (interface.isInitialized) interface.update(deltaTime);
+		else interface.init();
+		break;
+	}
+
+	if (sceneBegin.isBegin()) {
+		pantallaActual = 1;
+	}
 	
 	if (scene.highMode) {
 		// Generar color aleatorio para el cielo
@@ -33,22 +68,54 @@ bool Game::update(int deltaTime)
 		glClearColor(148 / 255.0f, 148 / 255.0f, 1.0f, 1.0f);
 	}
 	return bPlay;
+
 }
 
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	scene.render();
-	interface.render();
+	switch (pantallaActual) {
+		case 0:
+			sceneBegin.render();
+			interface.render();
+			break;
+		case 1:
+			scene.render();
+			interface.render();
+			break;
+		case 2:
+			scene2.render();
+			interface.render();
+			break;
+	}
 }
 
 void Game::keyPressed(int key)
 {
 	//updateModifiers();
-	if(key == 27) {// Escape code
-		bPlay = false;
+	switch (key) {
+		case 27:
+			bPlay = false;
+			break;
+		case '0':
+			pantallaActual = 0;
+			init();
+			render();
+			break;
+		case '1':
+			pantallaActual = 1;
+			init();
+			render();
+			break;
+		case '2':
+			pantallaActual = 2;
+			init();
+			render();
+			break;
 	}
+
 	keys[key] = true;
+	
 
 }
 
@@ -59,6 +126,7 @@ void Game::keyReleased(int key)
 
 void Game::specialKeyPressed(int key)
 {
+
 	specialKeys[key] = true;
 }
 

@@ -30,6 +30,9 @@ public:
 	void update(int deltaTime);
 	void render();
 	bool highMode;
+
+	bool isInitialized = false;
+
 private:
 	void initShaders();
 	void spawnCoins();

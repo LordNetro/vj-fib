@@ -4,6 +4,7 @@
 
 #include "Scene.h"
 #include "SceneInterface.h"
+#include "SceneBegin.h"
 
 
 #define SCREEN_WIDTH 1280
@@ -47,8 +48,11 @@ public:
 	bool getSpecialKey(int key) const;
 
 private:
+	int pantallaActual = 0;
 	bool bPlay;                       // Continue to play game?
 	Scene scene;                      // Scene to render
+	Scene scene2;
+	SceneBegin sceneBegin;
 	SceneInterface interface;
 	bool keys[256], specialKeys[256]; // Store key states so that 
 	//int modifiers;
