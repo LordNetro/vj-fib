@@ -10,6 +10,7 @@
 #include <string>
 #include <sstream>
 
+
 #define SCREEN_X 32
 #define SCREEN_Y 16
 
@@ -21,6 +22,10 @@
 
 #define INIT_KOOPA_X_TILES 32
 #define INIT_KOOPA_Y_TILES 13
+
+#define INIT_LETTER_X_TILES 5
+#define INIT_LETTER_Y_TILES 10
+
 
 void print(const std::string& str) {
 	std::wstring wstr = std::wstring(str.begin(), str.end());
@@ -35,6 +40,7 @@ Scene::Scene()
 	player = NULL;
 	std::vector<Goomba*> goombas;
 	std::vector<Koopa*> koopas;
+	std::vector<Letter*> letters;
 }
 
 Scene::~Scene()
@@ -53,6 +59,11 @@ Scene::~Scene()
 	for (auto& koopa : koopas) {
 		if (koopa != NULL) {
 			delete koopa;
+		}
+	}
+	for (auto& letter : letters) {
+		if (letter != NULL) {
+			delete letter;
 		}
 	}
 }
@@ -90,6 +101,21 @@ void Scene::init()
 		koopas.push_back(newKoopa);
 	}
 
+	// Asegurarse de que el vector estï¿½ vacï¿½o antes de empezar a aï¿½adir letters
+	letters.clear();
+
+	//afegir com a caracters
+	int size = 6;
+	int word[6] = {25, 10, cl('T'), 10, cl('Y'), cl('Z')};
+
+	for (int i = 0; i < size; ++i) {
+		Letter* newLetter = new Letter();
+		newLetter->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, word[i]);
+		newLetter->setPosition(glm::vec2((INIT_LETTER_X_TILES + i) * map->getTileSize(), INIT_LETTER_Y_TILES * map->getTileSize()));
+		newLetter->setTileMap(map);
+		letters.push_back(newLetter);
+	}
+
 	zoomFactor = 6;
 	left = float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor);
 	right = float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor);
@@ -98,6 +124,11 @@ void Scene::init()
 	projection = glm::ortho(left, right, bottom, top);
 	currentTime = 0.0f;
 }
+
+//char majus to lletra
+int Scene::cl(char c) {
+	return c - 'A' + 10;
+};
 
 void Scene::update(int deltaTime)
 {
@@ -170,6 +201,14 @@ void Scene::update(int deltaTime)
 		if (update) koopas[i]->update(deltaTime);
 	}
 
+	int aux = letters.size();
+	for (int i = 0; i < aux; ++i) {
+		
+		letters[i]->setPosition(glm::vec2((INIT_LETTER_X_TILES + i) * map->getTileSize(), INIT_LETTER_Y_TILES * map->getTileSize()));
+		letters[i]->update(deltaTime);
+	}
+
+
 
 	// Actualización de la proyección
 	projection = glm::ortho(float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor),
@@ -197,7 +236,12 @@ void Scene::render()
 	for (auto& koopa : koopas) {
 		koopa->render();
 	}
+	for (auto& letter : letters) {
+		letter->render();
+	}
 }
+
+
 
 void Scene::initShaders()
 {
@@ -228,6 +272,3 @@ void Scene::initShaders()
 	vShader.free();
 	fShader.free();
 }
-
-
-

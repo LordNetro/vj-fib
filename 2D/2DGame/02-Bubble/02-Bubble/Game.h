@@ -3,6 +3,7 @@
 
 
 #include "Scene.h"
+#include "SceneIntro.h"
 
 
 #define SCREEN_WIDTH 1280

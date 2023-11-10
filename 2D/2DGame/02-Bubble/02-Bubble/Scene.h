@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Goomba.h"
 #include "Koopa.h"
+#include "Letter.h"
 #include <vector>
 
 
@@ -28,6 +29,7 @@ public:
 
 private:
 	void initShaders();
+	int Scene::cl(char c);
 
 private:
 	TileMap *map;
@@ -38,6 +40,7 @@ private:
 	ShaderProgram texProgram;
 	std::vector<Goomba*> goombas;  // Vector para almacenar punteros a Goomba
 	std::vector<Koopa*> koopas;  // Vector para almacenar punteros a Goomba
+	std::vector<Letter*> letters;
 	float currentTime;
 	glm::mat4 projection;
 	float zoomFactor;

@@ -15,8 +15,10 @@
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Koopa.h" />
+    <ClInclude Include="Letter.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneIntro.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Sprite.h" />
@@ -27,9 +29,11 @@
     <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Koopa.cpp" />
+    <ClCompile Include="Letter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneIntro.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Sprite.cpp" />
