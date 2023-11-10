@@ -15,7 +15,6 @@
 
 class Game
 {
-
 private:
 	Game() {}
 	
@@ -40,6 +39,9 @@ public:
 	void mousePress(int button);
 	void mouseRelease(int button);
 	
+	//void updateModifiers();
+	//int getModifiers() const { return modifiers; }
+
 	bool getKey(int key) const;
 	bool getSpecialKey(int key) const;
 
@@ -48,7 +50,8 @@ private:
 	Scene scene;                      // Scene to render
 	SceneIntro scene2;
 	bool keys[256], specialKeys[256]; // Store key states so that 
-	                                  // we can have access at any time
+	//int modifiers;
+	// we can have access at any time
 
 };
 
