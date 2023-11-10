@@ -10,13 +10,13 @@ void Game::init()
 	bPlay = true;
 	glClearColor(148/255.0f, 148/255.0f, 1.0f, 1.0f);
 	scene.init();
-	scene2.init();
+	interface.init();
 }
 
 bool Game::update(int deltaTime)
 {
 	scene.update(deltaTime);
-	scene2.update(deltaTime);
+	interface.update(deltaTime);
 	
 	if (scene.highMode) {
 		// Generar color aleatorio para el cielo
@@ -33,7 +33,7 @@ void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	scene.render();
-	//scene2.render();
+	interface.render();
 }
 
 void Game::keyPressed(int key)

@@ -44,15 +44,15 @@ SceneIntro::~SceneIntro()
 void SceneIntro::init()
 {
 	initShaders();
-	map = TileMap::createTileMap("levels/barriolevel01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	deco = TileMap::createTileMap("levels/barriolevel01deco.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = TileMap::createTileMap("interface/template.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	
+	zoomFactor = 4;
 	left = 0;
-	right = SCREEN_WIDTH;
-	top = SCREEN_HEIGHT;
+	right = SCREEN_WIDTH/16 * zoomFactor;
+	top = SCREEN_HEIGHT/8 * zoomFactor;
 	bottom = 0;
-	zoomFactor = 6;
-	projection = glm::ortho(left, right, top, bottom);
+	
+	projection = glm::ortho(left+48, right+48, top-100, bottom+16);
 	currentTime = 0.0f;
 }
 
@@ -74,7 +74,6 @@ void SceneIntro::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
-	deco->render();
 	map->render();
 }
 
