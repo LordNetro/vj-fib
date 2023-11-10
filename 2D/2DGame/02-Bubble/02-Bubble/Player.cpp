@@ -126,6 +126,16 @@ bool Player::isJumpingOrFalling() {
 
 void Player::update(int deltaTime)
 {
+	if (Game::instance().getKey('1')) {
+		drugType = 1;
+		changed = false;
+	}
+	if (Game::instance().getKey('2')) {
+		isInvincible = true;
+		isInvincibleHigh = true;
+		invincibleTimer = 0.f;
+		invincibleDuration = 6.f;
+	}
 	blockPos = glm::vec2(0.f, 0.f);
 	if (isInvincible) {
 		invincibleTimer += deltaTime / 1000.0f; // Convertir milisegundos a segundos

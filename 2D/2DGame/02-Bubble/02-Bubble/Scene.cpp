@@ -42,6 +42,7 @@ Scene::Scene()
 	std::vector<Koopa*> koopas;
 	std::vector<Letter*> letters;
 	std::vector<Block*> blocks;
+	std::vector<Coin*> coins;
 }
 
 Scene::~Scene()
@@ -77,6 +78,11 @@ Scene::~Scene()
 	for (auto& block : blocks) {
 		if (block != NULL) {
 			delete block;
+		}
+	}
+	for (auto& coin : coins) {
+		if (coin != NULL) {
+			delete coin;
 		}
 	}
 }
@@ -134,7 +140,7 @@ void Scene::init()
 	// Asegurarse de que el vector estï¿½ vacï¿½o antes de empezar a aï¿½adir Koopas
 	powerups.clear();
 
-	for (int i = 0; i < 4; ++i) {
+	for (int i = 0; i < 0; ++i) {
 		Powerup* newPowerup = new Powerup();
 		newPowerup->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, i%2 == 0);
 		newPowerup->setPosition(glm::vec2((INIT_KOOPA_X_TILES + i * 2) * map->getTileSize(), INIT_KOOPA_Y_TILES * map->getTileSize()));
@@ -150,6 +156,16 @@ void Scene::init()
 		newBlock->setPosition(glm::vec2((INIT_KOOPA_X_TILES + i * 2) * map->getTileSize(), INIT_KOOPA_Y_TILES * map->getTileSize()));
 		newBlock->setTileMap(map);
 		blocks.push_back(newBlock);
+	}
+
+	coins.clear();
+
+	for (int i = 0; i < 3; ++i) {
+		Coin* newCoin = new Coin();
+		newCoin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, i % 2 == 0);
+		newCoin->setPosition(glm::vec2((336 + i * map->getTileSize()*2), 208));
+		newCoin->setTileMap(map);
+		coins.push_back(newCoin);
 	}
 
 	zoomFactor = 6;
@@ -199,6 +215,7 @@ void Scene::update(int deltaTime)
 		newBlock->setPosition(glm::vec2(player->blockPos.x, player->blockPos.y - map->getTileSize()));
 		newBlock->setTileMap(map);
 		blocks.push_back(newBlock);
+		print("PON MONEDA EN: " + std::to_string(player->blockPos.x) + " " + std::to_string(player->blockPos.y - map->getTileSize() * 2) + "\n");
 		player->breakedBlock = false;
 	}
 	//print("SPAWN: " + std::to_string(INIT_PLAYER_Y_TILES * map->getTileSize()));
@@ -354,6 +371,10 @@ void Scene::update(int deltaTime)
 		blocks[i]->update(deltaTime);
 	}
 
+	for (int i = 0; i < coins.size(); ++i) {
+		coins[i]->update(deltaTime);
+	}
+
 	if (player->isInvincibleHigh) highMode = true;
 	else highMode = false;
 	// Actualización de la proyección
@@ -377,6 +398,9 @@ void Scene::render()
 	map->render();
 	for (auto& block : blocks) {
 		block->render();
+	}
+	for (auto& coin : coins) {
+		coin->render();
 	}
 	player->render();
 	for (auto& goomba : goombas) {
