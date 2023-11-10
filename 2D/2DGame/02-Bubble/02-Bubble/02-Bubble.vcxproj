@@ -20,7 +20,8 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Powerup.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneIntro.h" />
+    <ClInclude Include="SceneBegin.h" />
+    <ClInclude Include="SceneInterface.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Sprite.h" />
@@ -37,7 +38,8 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Powerup.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneIntro.cpp" />
+    <ClCompile Include="SceneBegin.cpp" />
+    <ClCompile Include="SceneInterface.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Sprite.cpp" />
