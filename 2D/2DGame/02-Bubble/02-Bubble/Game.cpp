@@ -13,6 +13,12 @@ void Game::init()
 	interface.init();
 }
 
+void Game::resetFirstLevel()
+{
+	scene.init();
+	interface.init();
+}
+
 bool Game::update(int deltaTime)
 {
 	scene.update(deltaTime);

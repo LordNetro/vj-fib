@@ -10,7 +10,7 @@ enum CoinAnims
 	STAND
 };
 
-void Coin::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, bool isAir)
+void Coin::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	spritesheet.loadFromFile("images/super_barrio_items.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.0625, 0.0625), &spritesheet, &shaderProgram);

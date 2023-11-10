@@ -32,6 +32,8 @@ public:
 	bool highMode;
 private:
 	void initShaders();
+	void spawnCoins();
+	void spawnEnemies();
 	int Scene::cl(char c);
 
 private:

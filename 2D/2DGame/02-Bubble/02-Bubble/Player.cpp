@@ -6,7 +6,7 @@
 #include "Game.h"
 
 #define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 96
+#define JUMP_HEIGHT 80
 #define FALL_STEP 6
 #include <windows.h>
 #include <string>
@@ -25,6 +25,7 @@ enum PlayerAnims
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
+	score = 0;
 	isFalling = false;
 	breakedBlock = false;
 	powerupBlock = false;
@@ -32,7 +33,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	isInvincible = false;
 	isInvincibleHigh = false;
 	invincibleTimer = 0.0f;
-	invincibleDuration = 2.0f; // 2 segundos
+	invincibleDuration = 0.0f; // 2 segundos
 	speedX = 0.f;
 	accelX = 0.1f;
 	maxSpeedX = 2.5f;
@@ -126,11 +127,11 @@ bool Player::isJumpingOrFalling() {
 
 void Player::update(int deltaTime)
 {
-	if (Game::instance().getKey('1')) {
+	if (Game::instance().getKey('m')) {
 		drugType = 1;
 		changed = false;
 	}
-	if (Game::instance().getKey('2')) {
+	if (Game::instance().getKey('g')) {
 		isInvincible = true;
 		isInvincibleHigh = true;
 		invincibleTimer = 0.f;
@@ -143,6 +144,7 @@ void Player::update(int deltaTime)
 			isInvincible = false;
 			isInvincibleHigh = false;
 			invincibleTimer = 0.0f;
+			invincibleDuration = 0.f;
 		}
 	}
 	if (drugType == 1 && !changed) {
@@ -165,8 +167,10 @@ void Player::update(int deltaTime)
 
 	//int mod = Game::instance().getModifiers();
 	if (Game::instance().getKey('a')) {
-		accelX = 0.1f;
-		maxSpeedX = 4.f;
+		//accelX = 0.1f;
+		//maxSpeedX = 4.f;
+		accelX = 0.5f; // debug
+		maxSpeedX = 10.f;// debug
 	}
 	else {
 		accelX = 0.1f;

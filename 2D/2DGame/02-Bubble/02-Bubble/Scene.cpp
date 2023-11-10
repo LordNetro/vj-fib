@@ -87,6 +87,163 @@ Scene::~Scene()
 	}
 }
 
+void Scene::spawnCoins() {
+	coins.clear();
+
+	for (int i = 0; i < 3; ++i) {
+		Coin* newCoin = new Coin();
+		newCoin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newCoin->setPosition(glm::vec2((336 + i * map->getTileSize() * 2), 208));
+		newCoin->setTileMap(map);
+		coins.push_back(newCoin);
+	}
+
+	for (int i = 0; i < 3; ++i) {
+		Coin* newCoin = new Coin();
+		newCoin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newCoin->setPosition(glm::vec2((875 + i * map->getTileSize() * 2), 208));
+		newCoin->setTileMap(map);
+		coins.push_back(newCoin);
+	}
+
+	for (int i = 0; i < 5; ++i) {
+		Coin* newCoin = new Coin();
+		newCoin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newCoin->setPosition(glm::vec2((1312 + i * map->getTileSize() * 2), 144));
+		newCoin->setTileMap(map);
+		coins.push_back(newCoin);
+	}
+
+	for (int i = 0; i < 3; ++i) {
+		Coin* newCoin = new Coin();
+		newCoin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newCoin->setPosition(glm::vec2((1792 + i * map->getTileSize() * 3), 272));
+		newCoin->setTileMap(map);
+		coins.push_back(newCoin);
+	}
+
+	for (int i = 0; i < 2; ++i) {
+		Coin* newCoin = new Coin();
+		newCoin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newCoin->setPosition(glm::vec2((2032 + i * map->getTileSize() * 2), 144));
+		newCoin->setTileMap(map);
+		coins.push_back(newCoin);
+	}
+
+	for (int i = 0; i < 2; ++i) {
+		Coin* newCoin = new Coin();
+		newCoin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newCoin->setPosition(glm::vec2((2144 + i * map->getTileSize() * 3), 144));
+		newCoin->setTileMap(map);
+		coins.push_back(newCoin);
+	}
+
+	for (int i = 0; i < 2; ++i) {
+		Coin* newCoin = new Coin();
+		newCoin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newCoin->setPosition(glm::vec2((2960 + i * map->getTileSize() * 3), 160));
+		newCoin->setTileMap(map);
+		coins.push_back(newCoin);
+	}
+
+	for (int i = 0; i < 4; ++i) {
+		Coin* newCoin = new Coin();
+		newCoin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newCoin->setPosition(glm::vec2((2960 + i * map->getTileSize()), 272));
+		newCoin->setTileMap(map);
+		coins.push_back(newCoin);
+	}
+
+	for (int i = 0; i < 4; ++i) {
+		Coin* newCoin = new Coin();
+		newCoin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newCoin->setPosition(glm::vec2((3712 + i * map->getTileSize()), 272));
+		newCoin->setTileMap(map);
+		coins.push_back(newCoin);
+	}
+}
+
+void Scene::spawnEnemies() {
+	goombas.clear();
+	koopas.clear();
+
+	Goomba* newGoomba = new Goomba();
+	newGoomba->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	newGoomba->setPosition(glm::vec2((336 * map->getTileSize()), 300));
+	newGoomba->setTileMap(map);
+	goombas.push_back(newGoomba);
+
+	for (int i = 0; i < 3; ++i) {
+		Goomba* newGoomba = new Goomba();
+		newGoomba->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newGoomba->setPosition(glm::vec2((336 + i * map->getTileSize() * 2), 272));
+		newGoomba->setTileMap(map);
+		goombas.push_back(newGoomba);
+	}
+
+	for (int i = 0; i < 2; ++i) {
+		Goomba* newGoomba = new Goomba();
+		newGoomba->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newGoomba->setPosition(glm::vec2((875 + i * map->getTileSize() * 2), 272));
+		newGoomba->setTileMap(map);
+		goombas.push_back(newGoomba);
+	}
+	for (int i = 0; i < 1; ++i) {
+		Koopa* newKoopa = new Koopa();
+		newKoopa->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newKoopa->setPosition(glm::vec2((891 + i * map->getTileSize()), 256));
+		newKoopa->setTileMap(map);
+		koopas.push_back(newKoopa);
+	}
+	for (int i = 0; i < 2; ++i) {
+		Goomba* newGoomba = new Goomba();
+		newGoomba->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newGoomba->setPosition(glm::vec2((1312 + i * map->getTileSize() * 2), 144));
+		newGoomba->setTileMap(map);
+		goombas.push_back(newGoomba);
+	}
+	for (int i = 0; i < 2; ++i) {
+		Koopa* newKoopa = new Koopa();
+		newKoopa->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newKoopa->setPosition(glm::vec2((1312 + i * map->getTileSize()*2), 256));
+		newKoopa->setTileMap(map);
+		koopas.push_back(newKoopa);
+	}
+
+	for (int i = 0; i < 5; ++i) {
+		Goomba* newGoomba = new Goomba();
+		newGoomba->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newGoomba->setPosition(glm::vec2((1792 + i * map->getTileSize() * 4), 144));
+		newGoomba->setTileMap(map);
+		goombas.push_back(newGoomba);
+	}
+
+	for (int i = 0; i < 1; ++i) {
+		Koopa* newKoopa = new Koopa();
+		newKoopa->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newKoopa->setPosition(glm::vec2((1792 + i * map->getTileSize()), 256));
+		newKoopa->setTileMap(map);
+		koopas.push_back(newKoopa);
+	}
+
+	for (int i = 0; i < 5; ++i) {
+		Goomba* newGoomba = new Goomba();
+		newGoomba->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newGoomba->setPosition(glm::vec2((2960 + i * map->getTileSize() * 2), 144));
+		newGoomba->setTileMap(map);
+		goombas.push_back(newGoomba);
+	}
+
+	for (int i = 0; i < 1; ++i) {
+		Koopa* newKoopa = new Koopa();
+		newKoopa->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		newKoopa->setPosition(glm::vec2((3200 + i * map->getTileSize()), 144));
+		newKoopa->setTileMap(map);
+		koopas.push_back(newKoopa);
+	}
+
+}
+
 
 void Scene::init()
 {
@@ -98,28 +255,6 @@ void Scene::init()
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
-
-	// Asegurarse de que el vector estï¿½ vacï¿½o antes de empezar a aï¿½adir Goombas
-	goombas.clear();
-
-	for (int i = 0; i < 1; ++i) {
-		Goomba* newGoomba = new Goomba();
-		newGoomba->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		newGoomba->setPosition(glm::vec2((INIT_GOOMBA_X_TILES + i * 2) * map->getTileSize(), INIT_GOOMBA_Y_TILES * map->getTileSize()));
-		newGoomba->setTileMap(map);
-		goombas.push_back(newGoomba);
-	}
-
-	// Asegurarse de que el vector estï¿½ vacï¿½o antes de empezar a aï¿½adir Koopas
-	koopas.clear();
-
-	for (int i = 0; i < 1; ++i) {
-		Koopa* newKoopa = new Koopa();
-		newKoopa->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		newKoopa->setPosition(glm::vec2((INIT_KOOPA_X_TILES + i * 2) * map->getTileSize(), INIT_KOOPA_Y_TILES * map->getTileSize()));
-		newKoopa->setTileMap(map);
-		koopas.push_back(newKoopa);
-	}
 	/*
 	// Asegurarse de que el vector estï¿½ vacï¿½o antes de empezar a aï¿½adir letters
 	letters.clear();
@@ -140,33 +275,11 @@ void Scene::init()
 	// Asegurarse de que el vector estï¿½ vacï¿½o antes de empezar a aï¿½adir Koopas
 	powerups.clear();
 
-	for (int i = 0; i < 0; ++i) {
-		Powerup* newPowerup = new Powerup();
-		newPowerup->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, i%2 == 0);
-		newPowerup->setPosition(glm::vec2((INIT_KOOPA_X_TILES + i * 2) * map->getTileSize(), INIT_KOOPA_Y_TILES * map->getTileSize()));
-		newPowerup->setTileMap(map);
-		powerups.push_back(newPowerup);
-	}
-
 	blocks.clear();
 
-	for (int i = 0; i < 0; ++i) {
-		Block* newBlock = new Block();
-		newBlock->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, i % 2 == 0);
-		newBlock->setPosition(glm::vec2((INIT_KOOPA_X_TILES + i * 2) * map->getTileSize(), INIT_KOOPA_Y_TILES * map->getTileSize()));
-		newBlock->setTileMap(map);
-		blocks.push_back(newBlock);
-	}
+	spawnCoins();
 
-	coins.clear();
-
-	for (int i = 0; i < 3; ++i) {
-		Coin* newCoin = new Coin();
-		newCoin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, i % 2 == 0);
-		newCoin->setPosition(glm::vec2((336 + i * map->getTileSize()*2), 208));
-		newCoin->setTileMap(map);
-		coins.push_back(newCoin);
-	}
+	spawnEnemies();
 
 	zoomFactor = 6;
 	left = float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor) + 96;
@@ -185,17 +298,32 @@ int Scene::cl(char c) {
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	player->update(deltaTime);
+	player->update(deltaTime); //3712
+	if (player->posPlayer.y > 272) {
+		Game::instance().resetFirstLevel();
+	}
+	print(std::to_string(player->posPlayer.x)+"\n"+ std::to_string(player->posPlayer.y) + "\n");
+	if (player->posPlayer.x >= 3712) player->isDying = true;
+	
 	if (player->powerupBlock) {
 		std::srand(static_cast<unsigned int>(std::time(nullptr)));
-
-		// Generar bool aleatoria para generar el powerup (lucky try)
-		Powerup* newPowerup = new Powerup();
-		newPowerup->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, std::rand() % 2 == 0);
-		newPowerup->setPosition(glm::vec2(player->blockPos.x, player->blockPos.y - map->getTileSize()*2));
-		newPowerup->setTileMap(map);
-		powerups.push_back(newPowerup);
-
+		int randomNum = std::rand() % 3;
+		if (randomNum == 2) {
+			Coin* newCoin = new Coin();
+			newCoin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+			newCoin->setPosition(glm::vec2(player->blockPos.x, player->blockPos.y - map->getTileSize() * 2));
+			newCoin->setTileMap(map);
+			coins.push_back(newCoin);
+		}
+		else {
+			// Generar bool aleatoria para generar el powerup (lucky try)
+			Powerup* newPowerup = new Powerup();
+			newPowerup->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, randomNum == 0);
+			newPowerup->setPosition(glm::vec2(player->blockPos.x, player->blockPos.y - map->getTileSize() * 2));
+			newPowerup->setTileMap(map);
+			powerups.push_back(newPowerup);
+		}
+		
 		Block* newBlock = new Block();
 		newBlock->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, false);
 		//newBlock->setPosition(glm::vec2(player->posPlayer.x/map->getTileSize(), player->posPlayer.y / map->getTileSize()));
@@ -224,6 +352,7 @@ void Scene::update(int deltaTime)
 		bool update = true;
 		// Asumiendo que posPlayer y posGoomba son glm::ivec2 y representan la esquina inferior izquierda del sprite
 		if (goombas[i]->isDying) {
+			player->score += 500;
 			update = false;
 			delete goombas[i];
 			goombas.erase(goombas.begin() + i); // Elimina el elemento del vector
@@ -249,7 +378,7 @@ void Scene::update(int deltaTime)
 			else if (player->drugType == 1) {
 				player->isInvincible = true;
 				player->invincibleTimer = 0.f;
-				player->invincibleDuration = 2.f;
+				player->invincibleDuration += 1.f;
 				player->drugType = 0;
 				player->changed = false;
 			}
@@ -278,7 +407,10 @@ void Scene::update(int deltaTime)
 			player->posPlayer.y + player->altura >= koopas[i]->posKoopa.y &&
 			!koopas[i]->isDying && !koopas[i]->isPushed) { // El jugador está justo encima del goomba
 			print("DYING DYING DYING DYING");
+			player->score += 500;
 			koopas[i]->isDying = true;
+			player->isInvincible = true;
+			player->invincibleDuration += 1.f;
 		}
 		else if (
 			player->posPlayer.x + 16 >= koopas[i]->posKoopa.x && // El jugador está a la izquierda del borde derecho del goomba 16
@@ -288,12 +420,13 @@ void Scene::update(int deltaTime)
 			if (!koopas[i]->isDying) {
 				print("HIT HIT HIT HIT\n");
 				if (player->isInvincibleHigh) {
+					player->score += 500;
 					koopas[i]->isDying = true;
 				}
 				else if (player->drugType == 1) {
 					player->isInvincible = true;
 					player->invincibleTimer = 0.f;
-					player->invincibleDuration = 2.f;
+					player->invincibleDuration += 1.f;
 					player->drugType = 0;
 					player->changed = false;
 				}
@@ -309,22 +442,22 @@ void Scene::update(int deltaTime)
 				koopas[i]->accelX = 1.f;
 				if (player->posPlayer.x <= koopas[i]->posKoopa.x + 8) {
 					koopas[i]->Movement = RIGHT;
-					koopas[i]->posKoopa = glm::ivec2(player->posPlayer.x + 30, player->posPlayer.y);
+					koopas[i]->posKoopa = glm::ivec2(player->posPlayer.x, player->posPlayer.y);
 				}
 				else {
 					koopas[i]->Movement = LEFT;
-					koopas[i]->posKoopa = glm::ivec2(player->posPlayer.x - 30, player->posPlayer.y);
+					koopas[i]->posKoopa = glm::ivec2(player->posPlayer.x, player->posPlayer.y);
 				}
 			}
 		}
 		if (koopas[i]->isPushed) {
-			for (int i = goombas.size() - 1; i >= 0; --i) {
-				if (
-					koopas[i]->posKoopa.x < goombas[i]->posGoomba.x + 16 && // El jugador está a la izquierda del borde derecho del goomba 16
-					koopas[i]->posKoopa.x + 16 > goombas[i]->posGoomba.x && // El jugador está a la derecha del borde izquierdo del goomba 16
-					koopas[i]->posKoopa.y <= goombas[i]->posGoomba.y &&
-					koopas[i]->posKoopa.y + 17 >= goombas[i]->posGoomba.y) { // El jugador está justo encima del goomba
-
+			for (int j = goombas.size() - 1; j >= 0; --j) {
+				if (goombas[i] != nullptr && !goombas[i]->isDying &&
+					koopas[i]->posKoopa.x < goombas[j]->posGoomba.x + 16 && // El jugador está a la izquierda del borde derecho del goomba 16
+					koopas[i]->posKoopa.x + 16 > goombas[j]->posGoomba.x && // El jugador está a la derecha del borde izquierdo del goomba 16
+					koopas[i]->posKoopa.y <= goombas[j]->posGoomba.y &&
+					koopas[i]->posKoopa.y + 17 >= goombas[j]->posGoomba.y) { // El jugador está justo encima del goomba
+					player->score += 500;
 					goombas[i]->isDying = true;
 				}
 			}
@@ -353,10 +486,12 @@ void Scene::update(int deltaTime)
 				player->isInvincibleHigh = true;
 				player->invincibleTimer = 0.f;
 				player->invincibleDuration = 6.f;
+				player->score += 2000;
 			}
 			else {
 				player->drugType = 1;
 				player->changed = false;
+				player->score += 2000;
 			}
 			
 			update = false;
@@ -371,8 +506,19 @@ void Scene::update(int deltaTime)
 		blocks[i]->update(deltaTime);
 	}
 
-	for (int i = 0; i < coins.size(); ++i) {
-		coins[i]->update(deltaTime);
+	for (int i = coins.size() - 1; i >= 0; --i) {
+		bool update = true;
+		if (player->posPlayer.x < coins[i]->posCoin.x + 16 && // El jugador está a la izquierda del borde derecho del powerup 16
+			player->posPlayer.x + 16 > coins[i]->posCoin.x && // El jugador está a la derecha del borde izquierdo del powerup 16
+			player->posPlayer.y <= coins[i]->posCoin.y &&
+			player->posPlayer.y >= coins[i]->posCoin.y - 16) { // El jugador está justo encima del goomba
+			print("PICKED UP COIN!!!");
+			player->score += 100;
+			update = false;
+			delete coins[i];
+			coins.erase(coins.begin() + i); // Elimina el elemento del vector
+		}
+		if (update) coins[i]->update(deltaTime);
 	}
 
 	if (player->isInvincibleHigh) highMode = true;

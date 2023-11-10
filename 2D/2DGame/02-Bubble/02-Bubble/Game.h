@@ -38,6 +38,7 @@ public:
 	void mouseMove(int x, int y);
 	void mousePress(int button);
 	void mouseRelease(int button);
+	void resetFirstLevel();
 	
 	//void updateModifiers();
 	//int getModifiers() const { return modifiers; }
