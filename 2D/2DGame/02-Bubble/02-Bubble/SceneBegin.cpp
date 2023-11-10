@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
-#include "SceneIntro.h"
+#include "SceneBegin.h"
 #include "Game.h"
 #include <GL/glut.h>
 
@@ -13,35 +13,21 @@
 #define SCREEN_X 32
 #define SCREEN_Y 16
 
-#define INIT_PLAYER_X_TILES 4
-#define INIT_PLAYER_Y_TILES 13
-
 
 //scene constructor
-SceneIntro::SceneIntro()
+SceneBegin::SceneBegin()
 {
 	map = NULL;
-	deco = NULL;
-	player = NULL;
 }
 
-SceneIntro::~SceneIntro()
+SceneBegin::~SceneBegin()
 {
 	if (map != NULL)
 		delete map;
-	if (deco != NULL)
-		delete deco;
-	if (player != NULL)
-		delete player;
 }
 
-//test
 
-
-
-//endtest
-
-void SceneIntro::init()
+void SceneBegin::init()
 {
 	initShaders();
 	map = TileMap::createTileMap("interface/template.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -56,14 +42,13 @@ void SceneIntro::init()
 	currentTime = 0.0f;
 }
 
-void SceneIntro::update(int deltaTime)
+void SceneBegin::update(int deltaTime)
 {
 	currentTime += deltaTime;
 
-
 }
 
-void SceneIntro::render()
+void SceneBegin::render()
 {
 	glm::mat4 modelview;
 
@@ -77,7 +62,7 @@ void SceneIntro::render()
 	map->render();
 }
 
-void SceneIntro::initShaders()
+void SceneBegin::initShaders()
 {
 	Shader vShader, fShader;
 
