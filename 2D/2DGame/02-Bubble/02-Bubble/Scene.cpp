@@ -62,11 +62,13 @@ Scene::~Scene()
 			delete koopa;
 		}
 	}
+	/*
 	for (auto& letter : letters) {
 		if (letter != NULL) {
 			delete letter;
 		}
 	}
+	*/
 	for (auto& powerup : powerups) {
 		if (powerup != NULL) {
 			delete powerup;
@@ -112,7 +114,7 @@ void Scene::init()
 		newKoopa->setTileMap(map);
 		koopas.push_back(newKoopa);
 	}
-
+	/*
 	// Asegurarse de que el vector estï¿½ vacï¿½o antes de empezar a aï¿½adir letters
 	letters.clear();
 
@@ -127,6 +129,8 @@ void Scene::init()
 		newLetter->setTileMap(map);
 		letters.push_back(newLetter);
 	}
+	*/
+
 	// Asegurarse de que el vector estï¿½ vacï¿½o antes de empezar a aï¿½adir Koopas
 	powerups.clear();
 
@@ -310,14 +314,14 @@ void Scene::update(int deltaTime)
 		}
 		if (update) koopas[i]->update(deltaTime);
 	}
-
+	/*
 	int aux = letters.size();
 	for (int i = 0; i < aux; ++i) {
 		
 		letters[i]->setPosition(glm::vec2((INIT_LETTER_X_TILES + i) * map->getTileSize(), INIT_LETTER_Y_TILES * map->getTileSize()));
 		letters[i]->update(deltaTime);
 	}
-
+	*/
 
 	//TODO Utilizamos un índice inverso para iterar y eliminar koopas sin problemas
 	for (int i = powerups.size() - 1; i >= 0; --i) {
@@ -381,9 +385,11 @@ void Scene::render()
 	for (auto& koopa : koopas) {
 		koopa->render();
 	}
+	/*
 	for (auto& letter : letters) {
 		letter->render();
 	}
+	*/
 	for (auto& powerup : powerups) {
 		powerup->render();
 	}

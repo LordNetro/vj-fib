@@ -3,7 +3,7 @@
 
 
 #include "Scene.h"
-#include "SceneIntro.h"
+#include "SceneInterface.h"
 
 
 #define SCREEN_WIDTH 1280
@@ -48,7 +48,7 @@ public:
 private:
 	bool bPlay;                       // Continue to play game?
 	Scene scene;                      // Scene to render
-	SceneIntro scene2;
+	SceneInterface interface;
 	bool keys[256], specialKeys[256]; // Store key states so that 
 	//int modifiers;
 	// we can have access at any time

@@ -1,11 +1,11 @@
-#ifndef _SCENEINTRO_INCLUDE
-#define _SCENEINTRO_INCLUDE
+#ifndef _SCENEBEGIN_INCLUDE
+#define _SCENEBEGIN_INCLUDE
 
 
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
 #include "TileMap.h"
-#include "Player.h"
+#include "Letter.h"
 #include <vector>
 
 
@@ -13,12 +13,12 @@
 // It is responsible for updating and render them.
 
 
-class SceneIntro
+class SceneBegin
 {
 
 public:
-	SceneIntro();
-	~SceneIntro();
+	SceneBegin();
+	~SceneBegin();
 
 	void init();
 	void update(int deltaTime);
@@ -29,8 +29,7 @@ private:
 
 private:
 	TileMap *map;
-	TileMap *deco;
-	Player* player;
+	TileMap* title;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
@@ -42,5 +41,5 @@ private:
 };
 
 
-#endif // _SCENEINTRO_INCLUDE
+#endif // _SCENEBEGIN_INCLUDE
 

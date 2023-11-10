@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
-#include "SceneIntro.h"
+#include "SceneBegin.h"
 #include "Game.h"
 #include <GL/glut.h>
 
@@ -13,57 +13,42 @@
 #define SCREEN_X 32
 #define SCREEN_Y 16
 
-#define INIT_PLAYER_X_TILES 4
-#define INIT_PLAYER_Y_TILES 13
-
 
 //scene constructor
-SceneIntro::SceneIntro()
+SceneBegin::SceneBegin()
 {
 	map = NULL;
-	deco = NULL;
-	player = NULL;
 }
 
-SceneIntro::~SceneIntro()
+SceneBegin::~SceneBegin()
 {
 	if (map != NULL)
 		delete map;
-	if (deco != NULL)
-		delete deco;
-	if (player != NULL)
-		delete player;
 }
 
-//test
 
-
-
-//endtest
-
-void SceneIntro::init()
+void SceneBegin::init()
 {
 	initShaders();
-	map = TileMap::createTileMap("levels/barriolevel01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	deco = TileMap::createTileMap("levels/barriolevel01deco.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = TileMap::createTileMap("interface/template.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	
+	zoomFactor = 4;
 	left = 0;
-	right = SCREEN_WIDTH;
-	top = SCREEN_HEIGHT;
+	right = SCREEN_WIDTH/16 * zoomFactor;
+	top = SCREEN_HEIGHT/8 * zoomFactor;
 	bottom = 0;
-	zoomFactor = 6;
-	projection = glm::ortho(left, right, top, bottom);
+	
+	projection = glm::ortho(left+48, right+48, top-100, bottom+16);
 	currentTime = 0.0f;
 }
 
-void SceneIntro::update(int deltaTime)
+void SceneBegin::update(int deltaTime)
 {
 	currentTime += deltaTime;
 
-
 }
 
-void SceneIntro::render()
+void SceneBegin::render()
 {
 	glm::mat4 modelview;
 
@@ -74,11 +59,10 @@ void SceneIntro::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
-	deco->render();
 	map->render();
 }
 
-void SceneIntro::initShaders()
+void SceneBegin::initShaders()
 {
 	Shader vShader, fShader;
 
