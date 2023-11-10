@@ -32,6 +32,7 @@ public:
 	float invincibleTimer;
 	float invincibleDuration; // 2 segundos
 	int altura;
+	glm::vec2 blockPos;
 
 private:
 	bool bJumping;

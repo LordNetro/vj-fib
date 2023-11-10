@@ -125,6 +125,7 @@ bool Player::isJumpingOrFalling() {
 
 void Player::update(int deltaTime)
 {
+	blockPos = glm::vec2(0.f, 0.f);
 	if (isInvincible) {
 		invincibleTimer += deltaTime / 1000.0f; // Convertir milisegundos a segundos
 		if (invincibleTimer >= invincibleDuration) {
@@ -263,7 +264,8 @@ void Player::update(int deltaTime)
 				{
 					posPlayer.y = int(startY - JUMP_HEIGHT * sin(3.14159f * jumpAngle / 180.f));
 					int blockType = 0;
-					if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, altura), &posPlayer.y, blockType, drugType == 1)) {
+					blockPos = glm::vec2(0.f,0.f);
+					if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, altura), &posPlayer.y, blockType, drugType == 1, blockPos)) {
 
 					}
 					else

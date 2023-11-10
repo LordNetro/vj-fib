@@ -41,6 +41,7 @@ Scene::Scene()
 	std::vector<Goomba*> goombas;
 	std::vector<Koopa*> koopas;
 	std::vector<Letter*> letters;
+	std::vector<Letter*> blocks;
 }
 
 Scene::~Scene()
@@ -69,6 +70,11 @@ Scene::~Scene()
 	for (auto& powerup : powerups) {
 		if (powerup != NULL) {
 			delete powerup;
+		}
+	}
+	for (auto& block : blocks) {
+		if (block != NULL) {
+			delete block;
 		}
 	}
 }
@@ -132,6 +138,16 @@ void Scene::init()
 		powerups.push_back(newPowerup);
 	}
 
+	blocks.clear();
+
+	for (int i = 0; i < 0; ++i) {
+		Block* newBlock = new Block();
+		newBlock->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, i % 2 == 0);
+		newBlock->setPosition(glm::vec2((INIT_KOOPA_X_TILES + i * 2) * map->getTileSize(), INIT_KOOPA_Y_TILES * map->getTileSize()));
+		newBlock->setTileMap(map);
+		blocks.push_back(newBlock);
+	}
+
 	zoomFactor = 6;
 	left = float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor);
 	right = float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor);
@@ -159,6 +175,26 @@ void Scene::update(int deltaTime)
 		newPowerup->setPosition(glm::vec2(player->posPlayer.x, player->posPlayer.y - map->getTileSize()*2));
 		newPowerup->setTileMap(map);
 		powerups.push_back(newPowerup);
+
+		Block* newBlock = new Block();
+		newBlock->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, false);
+		//newBlock->setPosition(glm::vec2(player->posPlayer.x/map->getTileSize(), player->posPlayer.y / map->getTileSize()));
+		float bPosX = player->posPlayer.x - 8 - ((player->posPlayer.x  - 8) % map->getTileSize());
+		//newBlock->setPosition(glm::vec2(bPosX + map->getTileSize(), player->posPlayer.y - map->getTileSize() - 1)); 
+		newBlock->setPosition(glm::vec2(player->blockPos.x, player->blockPos.y - map->getTileSize()));
+		newBlock->setTileMap(map);
+		blocks.push_back(newBlock);
+		//print("????? BLOCK AND ADDED ?? HITTED ON pos: " + std::to_string(player->posPlayer.x - (player->posPlayer.x % map->getTileSize())) + " " + std::to_string(player->posPlayer.y - map->getTileSize() - 1) + "\n");
+		//print("????? BLOCK AND ADDED ?? HITTED ON pos: "+std::to_string(player->blockPos.x)+" "+std::to_string(player->blockPos.y) + "\n");
+
+	}
+	if (player->breakedBlock) {
+		print("BREAKED BLOCK AND ADDED AIR");
+		Block* newBlock = new Block();
+		newBlock->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, true);
+		newBlock->setPosition(glm::vec2(player->blockPos.x, player->blockPos.y - map->getTileSize()));
+		newBlock->setTileMap(map);
+		blocks.push_back(newBlock);
 	}
 	//print("SPAWN: " + std::to_string(INIT_PLAYER_Y_TILES * map->getTileSize()));
 	//TODO Utilizamos un índice inverso para iterar y eliminar goombas sin problemas
@@ -296,6 +332,11 @@ void Scene::update(int deltaTime)
 		}
 		if (update) powerups[i]->update(deltaTime);
 	}
+
+	for (int i = 0; i < blocks.size(); ++i) {
+		blocks[i]->update(deltaTime);
+	}
+
 	if (player->isInvincibleHigh) highMode = true;
 	else highMode = false;
 	// Actualización de la proyección
@@ -317,6 +358,9 @@ void Scene::render()
 
 	deco->render();
 	map->render();
+	for (auto& block : blocks) {
+		block->render();
+	}
 	player->render();
 	for (auto& goomba : goombas) {
 		goomba->render();

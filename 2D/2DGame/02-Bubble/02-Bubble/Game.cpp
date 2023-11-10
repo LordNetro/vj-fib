@@ -33,7 +33,7 @@ void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	scene.render();
-	scene2.render();
+	//scene2.render();
 }
 
 void Game::keyPressed(int key)

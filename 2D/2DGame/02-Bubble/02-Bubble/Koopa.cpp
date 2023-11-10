@@ -140,7 +140,8 @@ void Koopa::update(int deltaTime)
 			{
 				futurePos.y = int(startY - JUMP_HEIGHT * sin(3.14159f * jumpAngle / 180.f));
 				int xda = 0;
-				if (!map->collisionMoveDown(futurePos, glm::ivec2(16, 24), &posKoopa.y ) && !map->collisionMoveUp(futurePos, glm::ivec2(16, 24), &posKoopa.y, xda, false))
+				glm::vec2 blockPos = glm::vec2(0.f, 0.f);
+				if (!map->collisionMoveDown(futurePos, glm::ivec2(16, 24), &posKoopa.y ) && !map->collisionMoveUp(futurePos, glm::ivec2(16, 24), &posKoopa.y, xda, false, blockPos))
 				{
 					posKoopa.y = futurePos.y;
 				}

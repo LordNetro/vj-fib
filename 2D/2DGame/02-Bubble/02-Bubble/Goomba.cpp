@@ -134,7 +134,8 @@ void Goomba::update(int deltaTime)
 			{
 				futurePos.y = int(startY - JUMP_HEIGHT * sin(3.14159f * jumpAngle / 180.f));
 				int xd = 0;
-				if (!map->collisionMoveDown(futurePos, glm::ivec2(16, 16), &posGoomba.y) && !map->collisionMoveUp(futurePos, glm::ivec2(16, 16), &posGoomba.y, xd, false))
+				glm::vec2 blockPos = glm::vec2(0.f, 0.f);
+				if (!map->collisionMoveDown(futurePos, glm::ivec2(16, 16), &posGoomba.y) && !map->collisionMoveUp(futurePos, glm::ivec2(16, 16), &posGoomba.y, xd, false, blockPos))
 				{
 					posGoomba.y = futurePos.y;
 				}

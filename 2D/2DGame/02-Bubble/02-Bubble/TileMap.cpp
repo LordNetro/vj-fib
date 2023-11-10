@@ -223,7 +223,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	return false;
 }
 
-bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY, int &blockType, bool breakable) const
+bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY, int &blockType, bool breakable, glm::vec2 &blockPos) const
 {
     int x0, x1, y;
 
@@ -243,6 +243,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int
                 *posY = tileSize * y + 1; // Ajustamos la posición en Y para evitar la colisión
 				if (blockType == 3) map[(y - 1) * mapSize.x + x] = 0;
 				else if (blockType == 13) map[(y - 1) * mapSize.x + x] = 99;
+				blockPos = glm::vec2(x * tileSize, y * tileSize);
 				//debugOutput("Choque ARRIBA!!!\n");
                 return true;
             }
