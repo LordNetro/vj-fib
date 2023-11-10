@@ -10,6 +10,7 @@
 #include "Koopa.h"
 #include "Letter.h"
 #include "Block.h"
+#include "Coin.h"
 #include "Powerup.h"
 #include <vector>
 
@@ -43,6 +44,7 @@ private:
 	std::vector<Letter*> letters;
 	std::vector<Powerup*> powerups;  // Vector para almacenar punteros a Powerup
 	std::vector<Block*> blocks;  // Vector para almacenar punteros a Powerup
+	std::vector<Coin*> coins;  // Vector para almacenar punteros a Powerup
 	float currentTime;
 	glm::mat4 projection;
 	float zoomFactor;

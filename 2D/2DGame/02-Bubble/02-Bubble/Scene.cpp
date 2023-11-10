@@ -41,7 +41,7 @@ Scene::Scene()
 	std::vector<Goomba*> goombas;
 	std::vector<Koopa*> koopas;
 	std::vector<Letter*> letters;
-	std::vector<Letter*> blocks;
+	std::vector<Block*> blocks;
 }
 
 Scene::~Scene()
@@ -176,7 +176,7 @@ void Scene::update(int deltaTime)
 		// Generar bool aleatoria para generar el powerup (lucky try)
 		Powerup* newPowerup = new Powerup();
 		newPowerup->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, std::rand() % 2 == 0);
-		newPowerup->setPosition(glm::vec2(player->posPlayer.x, player->posPlayer.y - map->getTileSize()*2));
+		newPowerup->setPosition(glm::vec2(player->blockPos.x, player->blockPos.x - map->getTileSize()*3));
 		newPowerup->setTileMap(map);
 		powerups.push_back(newPowerup);
 
@@ -188,9 +188,9 @@ void Scene::update(int deltaTime)
 		newBlock->setPosition(glm::vec2(player->blockPos.x, player->blockPos.y - map->getTileSize()));
 		newBlock->setTileMap(map);
 		blocks.push_back(newBlock);
-		//print("????? BLOCK AND ADDED ?? HITTED ON pos: " + std::to_string(player->posPlayer.x - (player->posPlayer.x % map->getTileSize())) + " " + std::to_string(player->posPlayer.y - map->getTileSize() - 1) + "\n");
+		print("PON MONEDA EN: " + std::to_string(player->blockPos.x) + " " + std::to_string(player->blockPos.y - map->getTileSize()*3) + "\n");
 		//print("????? BLOCK AND ADDED ?? HITTED ON pos: "+std::to_string(player->blockPos.x)+" "+std::to_string(player->blockPos.y) + "\n");
-
+		player->powerupBlock = false;
 	}
 	if (player->breakedBlock) {
 		print("BREAKED BLOCK AND ADDED AIR");
@@ -199,6 +199,7 @@ void Scene::update(int deltaTime)
 		newBlock->setPosition(glm::vec2(player->blockPos.x, player->blockPos.y - map->getTileSize()));
 		newBlock->setTileMap(map);
 		blocks.push_back(newBlock);
+		player->breakedBlock = false;
 	}
 	//print("SPAWN: " + std::to_string(INIT_PLAYER_Y_TILES * map->getTileSize()));
 	//TODO Utilizamos un índice inverso para iterar y eliminar goombas sin problemas
