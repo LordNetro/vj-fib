@@ -46,31 +46,21 @@ void SceneIntro::init()
 	initShaders();
 	map = TileMap::createTileMap("levels/barriolevel01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	deco = TileMap::createTileMap("levels/barriolevel01deco.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
-	player->setTileMap(map);
-
-
+	
+	left = 0;
+	right = SCREEN_WIDTH;
+	top = SCREEN_HEIGHT;
+	bottom = 0;
 	zoomFactor = 6;
-	left = float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor);
-	right = float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor);
-	top = float(player->posPlayer.y) - (SCREEN_HEIGHT / zoomFactor) + 16;
-	bottom = float(player->posPlayer.y) + (SCREEN_HEIGHT / zoomFactor) + 16;
-	projection = glm::ortho(left, right, bottom, top);
+	projection = glm::ortho(left, right, top, bottom);
 	currentTime = 0.0f;
 }
 
 void SceneIntro::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	player->update(deltaTime);
 
 
-	// Actualización de la proyección
-	projection = glm::ortho(float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor),
-		float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor),
-		bottom, top);
 }
 
 void SceneIntro::render()
@@ -86,7 +76,6 @@ void SceneIntro::render()
 
 	deco->render();
 	map->render();
-	player->render();
 }
 
 void SceneIntro::initShaders()
