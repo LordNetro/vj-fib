@@ -48,7 +48,7 @@ public:
 	bool getSpecialKey(int key) const;
 
 private:
-	int pantallaActual = 0;
+	int pantallaActual = 1;
 	bool bPlay;                       // Continue to play game?
 	Scene scene;                      // Scene to render
 	Scene scene2;

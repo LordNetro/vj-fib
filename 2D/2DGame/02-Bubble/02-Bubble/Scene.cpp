@@ -153,14 +153,6 @@ void Scene::spawnCoins() {
 		newCoin->setTileMap(map);
 		coins.push_back(newCoin);
 	}
-
-	for (int i = 0; i < 4; ++i) {
-		Coin* newCoin = new Coin();
-		newCoin->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		newCoin->setPosition(glm::vec2((3712 + i * map->getTileSize()), 272));
-		newCoin->setTileMap(map);
-		coins.push_back(newCoin);
-	}
 }
 
 void Scene::spawnEnemies() {
@@ -304,10 +296,10 @@ void Scene::update(int deltaTime)
 	currentTime += deltaTime;
 	player->update(deltaTime); //3712
 	if (player->posPlayer.y > 272) {
-		Game::instance().resetFirstLevel();
+		player->isDying = true;
 	}
 	print(std::to_string(player->posPlayer.x)+"\n"+ std::to_string(player->posPlayer.y) + "\n");
-	if (player->posPlayer.x >= 3712) player->isDying = true;
+	if (player->posPlayer.x >= 3712) Game::instance().resetFirstLevel();
 	
 	if (player->powerupBlock) {
 		std::srand(static_cast<unsigned int>(std::time(nullptr)));
@@ -340,7 +332,7 @@ void Scene::update(int deltaTime)
 		//print("????? BLOCK AND ADDED ?? HITTED ON pos: "+std::to_string(player->blockPos.x)+" "+std::to_string(player->blockPos.y) + "\n");
 		player->powerupBlock = false;
 	}
-	if (player->breakedBlock) {
+	if (player->drugType == 1 && player->breakedBlock) {
 		print("BREAKED BLOCK AND ADDED AIR");
 		Block* newBlock = new Block();
 		newBlock->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, true);
@@ -541,6 +533,7 @@ void Scene::update(int deltaTime)
 	projection = glm::ortho(float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor) + 96,
 		float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor) + 96,
 		bottom, top);
+	if (player->isDying) Game::instance().resetFirstLevel();
 }
 
 void Scene::render()

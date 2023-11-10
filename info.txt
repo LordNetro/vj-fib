@@ -13,3 +13,14 @@ Funcionalitats implementades:
 	-Win condition i lose condition
 	-Animacions per enemics, jugador, items...
 	-Blocs personalitzats
+
+Instruccions:
+	Explora el barri decadent d'en Mario a Super Barrio Bros! Salta i esquiva obstacles i enemics, i arriba a casa sa i estalvi al final del camí. I ja de pas, recull monedes per a fer-te ric!
+
+Controls:
+	Moviment: Mou-te amb les fletxes del teclat. Fletxa esquerra per anar cap a l'esquerra, fletxa dreta per anar cap a la dreta i fletxa amunt per saltar. Mantén la tecla A mentre et mous per córrer.
+
+Potenciadors:
+	Què t'espera dins els blocs interrogant? Sorpresa sorpresa...
+	Bolet: Fes-te gran i trenca les totxanes al teu camí.
+	Porro: Adquireix el poder del THC i torna't imparable durant uns segons.
