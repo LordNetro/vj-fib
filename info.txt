@@ -1,0 +1,15 @@
+Autors:
+	Sheng Ye
+	Marc Ortiz Lopez
+
+Funcionalitats implementades:
+	-1 nivell totalment funcional
+	-Sistema de puntuacio funcional
+	-2 enemics funcionals (goomba, koopa)
+	-Interfície d'usuari no funcional (HUD)
+	-Sistema de monedes associada a la puntuacio
+	-2 powerups funcionals (bolet, estrella (el porro))
+	-Modes de debug accionats per tecla (g=estrella, m=bolet)
+	-Win condition i lose condition
+	-Animacions per enemics, jugador, items...
+	-Blocs personalitzats
