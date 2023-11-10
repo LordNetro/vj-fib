@@ -176,7 +176,7 @@ void Scene::update(int deltaTime)
 		// Generar bool aleatoria para generar el powerup (lucky try)
 		Powerup* newPowerup = new Powerup();
 		newPowerup->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, std::rand() % 2 == 0);
-		newPowerup->setPosition(glm::vec2(player->blockPos.x, player->blockPos.x - map->getTileSize()*3));
+		newPowerup->setPosition(glm::vec2(player->blockPos.x, player->blockPos.y - map->getTileSize()*2));
 		newPowerup->setTileMap(map);
 		powerups.push_back(newPowerup);
 
@@ -188,7 +188,7 @@ void Scene::update(int deltaTime)
 		newBlock->setPosition(glm::vec2(player->blockPos.x, player->blockPos.y - map->getTileSize()));
 		newBlock->setTileMap(map);
 		blocks.push_back(newBlock);
-		print("PON MONEDA EN: " + std::to_string(player->blockPos.x) + " " + std::to_string(player->blockPos.y - map->getTileSize()*3) + "\n");
+		print("PON MONEDA EN: " + std::to_string(player->blockPos.x) + " " + std::to_string(player->blockPos.y - map->getTileSize()*2) + "\n");
 		//print("????? BLOCK AND ADDED ?? HITTED ON pos: "+std::to_string(player->blockPos.x)+" "+std::to_string(player->blockPos.y) + "\n");
 		player->powerupBlock = false;
 	}
