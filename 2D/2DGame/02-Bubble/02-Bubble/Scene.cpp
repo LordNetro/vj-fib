@@ -15,7 +15,7 @@
 #define SCREEN_Y 16
 
 #define INIT_PLAYER_X_TILES 4
-#define INIT_PLAYER_Y_TILES 13
+#define INIT_PLAYER_Y_TILES 14
 
 #define INIT_GOOMBA_X_TILES 16
 #define INIT_GOOMBA_Y_TILES 13
@@ -117,10 +117,10 @@ void Scene::init()
 	}
 
 	zoomFactor = 6;
-	left = float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor);
-	right = float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor);
-	top = float(player->posPlayer.y) - (SCREEN_HEIGHT / zoomFactor) + 16;
-	bottom = float(player->posPlayer.y) + (SCREEN_HEIGHT / zoomFactor) + 16;
+	left = float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor) + 96;
+	right = float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor) + 96;
+	top = float(player->posPlayer.y) - (SCREEN_HEIGHT / zoomFactor) - 12;
+	bottom = float(player->posPlayer.y) + (SCREEN_HEIGHT / zoomFactor) - 12;
 	projection = glm::ortho(left, right, bottom, top);
 	currentTime = 0.0f;
 }
@@ -211,8 +211,8 @@ void Scene::update(int deltaTime)
 
 
 	// Actualización de la proyección
-	projection = glm::ortho(float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor),
-		float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor),
+	projection = glm::ortho(float(player->posPlayer.x) - (SCREEN_WIDTH / zoomFactor) + 96,
+		float(player->posPlayer.x) + (SCREEN_WIDTH / zoomFactor) + 96,
 		bottom, top);
 }
 
