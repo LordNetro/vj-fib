@@ -25,6 +25,7 @@ enum PlayerAnims
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
+	isFalling = false;
 	breakedBlock = false;
 	powerupBlock = false;
 	altura = 16;
@@ -120,7 +121,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 }
 
 bool Player::isJumpingOrFalling() {
-	return bJumping || jumpAngle < 180;
+	return bJumping || isFalling;
 }
 
 void Player::update(int deltaTime)
@@ -290,12 +291,16 @@ void Player::update(int deltaTime)
 			posPlayer.y += FALL_STEP;
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(16, altura), &posPlayer.y))
 			{
+				isFalling = false;
 				if ((Game::instance().getSpecialKey(GLUT_KEY_UP) || Game::instance().getKey(32)) && !bJumping)
 				{
 					bJumping = true;
 					jumpAngle = 0;
 					startY = posPlayer.y;
 				}
+			}
+			else {
+				isFalling = true;
 			}
 
 		}

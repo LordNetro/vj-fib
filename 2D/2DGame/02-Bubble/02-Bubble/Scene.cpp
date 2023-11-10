@@ -209,8 +209,8 @@ void Scene::update(int deltaTime)
 		else if (player->isJumpingOrFalling() &&
 			player->posPlayer.x < goombas[i]->posGoomba.x + 16 && // El jugador está a la izquierda del borde derecho del goomba 16
 			player->posPlayer.x + 16 > goombas[i]->posGoomba.x && // El jugador está a la derecha del borde izquierdo del goomba 16
-			player->posPlayer.y <= goombas[i]->posGoomba.y - 14 &&
-			player->posPlayer.y >= goombas[i]->posGoomba.y - 17) { // El jugador está justo encima del goomba
+			player->posPlayer.y + player->altura <= goombas[i]->posGoomba.y + 6 &&
+			player->posPlayer.y + player->altura >= goombas[i]->posGoomba.y ) { // El jugador está justo encima del goomba
 
 			print("DYING DYING DYING DYING");
 			goombas[i]->isDying = true;
@@ -218,8 +218,8 @@ void Scene::update(int deltaTime)
 		else if (
 			player->posPlayer.x + 16 >= goombas[i]->posGoomba.x && // El jugador está a la izquierda del borde derecho del goomba 16
 			player->posPlayer.x <= goombas[i]->posGoomba.x + 16 &&
-			player->posPlayer.y > goombas[i]->posGoomba.y - player->altura-2 &&
-			player->posPlayer.y <= goombas[i]->posGoomba.y) {
+			player->posPlayer.y >= goombas[i]->posGoomba.y &&
+			player->posPlayer.y <= goombas[i]->posGoomba.y + 16) {
 			print("HIT HIT HIT HIT\n");
 			if (player->isInvincibleHigh) {
 				goombas[i]->isDying = true;
@@ -252,8 +252,8 @@ void Scene::update(int deltaTime)
 		/*else*/if (player->isJumpingOrFalling() &&
 			player->posPlayer.x < koopas[i]->posKoopa.x + 16 && // El jugador está a la izquierda del borde derecho del goomba 16
 			player->posPlayer.x + 16 > koopas[i]->posKoopa.x && // El jugador está a la derecha del borde izquierdo del goomba 16
-			player->posPlayer.y <= koopas[i]->posKoopa.y - 22 &&
-			player->posPlayer.y >= koopas[i]->posKoopa.y - 25 &&
+			player->posPlayer.y + player->altura <= koopas[i]->posKoopa.y + 6 &&
+			player->posPlayer.y + player->altura >= koopas[i]->posKoopa.y &&
 			!koopas[i]->isDying && !koopas[i]->isPushed) { // El jugador está justo encima del goomba
 			print("DYING DYING DYING DYING");
 			koopas[i]->isDying = true;
@@ -261,8 +261,8 @@ void Scene::update(int deltaTime)
 		else if (
 			player->posPlayer.x + 16 >= koopas[i]->posKoopa.x && // El jugador está a la izquierda del borde derecho del goomba 16
 			player->posPlayer.x <= koopas[i]->posKoopa.x + 16 &&
-			player->posPlayer.y > koopas[i]->posKoopa.y - 22 + 8 &&
-			player->posPlayer.y <= koopas[i]->posKoopa.y + 8) {
+			player->posPlayer.y >= koopas[i]->posKoopa.y &&
+			player->posPlayer.y <= koopas[i]->posKoopa.y + 24) {
 			if (!koopas[i]->isDying) {
 				print("HIT HIT HIT HIT\n");
 				if (player->isInvincibleHigh) {
@@ -292,6 +292,18 @@ void Scene::update(int deltaTime)
 				else {
 					koopas[i]->Movement = LEFT;
 					koopas[i]->posKoopa = glm::ivec2(player->posPlayer.x - 30, player->posPlayer.y);
+				}
+			}
+		}
+		if (koopas[i]->isPushed) {
+			for (int i = goombas.size() - 1; i >= 0; --i) {
+				if (
+					koopas[i]->posKoopa.x < goombas[i]->posGoomba.x + 16 && // El jugador está a la izquierda del borde derecho del goomba 16
+					koopas[i]->posKoopa.x + 16 > goombas[i]->posGoomba.x && // El jugador está a la derecha del borde izquierdo del goomba 16
+					koopas[i]->posKoopa.y <= goombas[i]->posGoomba.y &&
+					koopas[i]->posKoopa.y + 17 >= goombas[i]->posGoomba.y) { // El jugador está justo encima del goomba
+
+					goombas[i]->isDying = true;
 				}
 			}
 		}

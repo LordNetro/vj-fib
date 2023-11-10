@@ -47,6 +47,7 @@ private:
 	float speedX;          // Velocidad horizontal actual del jugador
 	float accelX;    // Aceleración horizontal
 	float maxSpeedX; // Velocidad máxima horizontal
+	bool isFalling;
 
 };
 
