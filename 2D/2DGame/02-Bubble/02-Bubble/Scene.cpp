@@ -367,10 +367,15 @@ void Scene::update(int deltaTime)
 			goombas[i]->isDying = true;
 		}
 		else if (
-			player->posPlayer.x + 16 >= goombas[i]->posGoomba.x && // El jugador está a la izquierda del borde derecho del goomba 16
-			player->posPlayer.x <= goombas[i]->posGoomba.x + 16 &&
-			player->posPlayer.y >= goombas[i]->posGoomba.y &&
-			player->posPlayer.y <= goombas[i]->posGoomba.y + 16) {
+			(player->posPlayer.x + 16 >= goombas[i]->posGoomba.x && // El jugador está a la izquierda del borde derecho del goomba 16
+				player->posPlayer.x <= goombas[i]->posGoomba.x + 16 &&
+				player->posPlayer.y >= goombas[i]->posGoomba.y &&
+				player->posPlayer.y <= goombas[i]->posGoomba.y + 16) ||
+			(player->drugType == 1 && player->posPlayer.x + 16 >= goombas[i]->posGoomba.x && // El jugador está a la izquierda del borde derecho del goomba 16
+				player->posPlayer.x <= goombas[i]->posGoomba.x + 16 &&
+				player->posPlayer.y +16>= goombas[i]->posGoomba.y &&
+				player->posPlayer.y +16<= goombas[i]->posGoomba.y + 16)
+			) {
 			print("HIT HIT HIT HIT\n");
 			if (player->isInvincibleHigh) {
 				goombas[i]->isDying = true;
@@ -413,10 +418,15 @@ void Scene::update(int deltaTime)
 			player->invincibleDuration += 1.f;
 		}
 		else if (
-			player->posPlayer.x + 16 >= koopas[i]->posKoopa.x && // El jugador está a la izquierda del borde derecho del goomba 16
-			player->posPlayer.x <= koopas[i]->posKoopa.x + 16 &&
-			player->posPlayer.y >= koopas[i]->posKoopa.y &&
-			player->posPlayer.y <= koopas[i]->posKoopa.y + 24) {
+			(player->posPlayer.x + 16 >= koopas[i]->posKoopa.x && // El jugador está a la izquierda del borde derecho del goomba 16
+				player->posPlayer.x <= koopas[i]->posKoopa.x + 16 &&
+				player->posPlayer.y >= koopas[i]->posKoopa.y &&
+				player->posPlayer.y <= koopas[i]->posKoopa.y + 26)||
+			(player->drugType == 1 && player->posPlayer.x + 16 >= koopas[i]->posKoopa.x && // El jugador está a la izquierda del borde derecho del goomba 16
+				player->posPlayer.x <= koopas[i]->posKoopa.x + 16 &&
+				player->posPlayer.y +16>= koopas[i]->posKoopa.y &&
+				player->posPlayer.y + 16 <= koopas[i]->posKoopa.y + 26)
+			) {
 			if (!koopas[i]->isDying) {
 				print("HIT HIT HIT HIT\n");
 				if (player->isInvincibleHigh) {

@@ -167,10 +167,10 @@ void Player::update(int deltaTime)
 
 	//int mod = Game::instance().getModifiers();
 	if (Game::instance().getKey('a')) {
-		//accelX = 0.1f;
-		//maxSpeedX = 4.f;
-		accelX = 0.5f; // debug
-		maxSpeedX = 10.f;// debug
+		accelX = 0.1f;
+		maxSpeedX = 4.f;
+		//accelX = 0.5f; // debug
+		//maxSpeedX = 10.f;// debug
 	}
 	else {
 		accelX = 0.1f;
